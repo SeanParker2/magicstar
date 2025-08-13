@@ -1,0 +1,180 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 代码质量检查
+  lint-and-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: magicstar-${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm run lint
+
+      - name: Run tests
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm run test:cov
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./magicstar-${{ matrix.project }}/coverage/lcov.info
+          flags: ${{ matrix.project }}
+          name: ${{ matrix.project }}-coverage
+
+  # 安全扫描
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # 构建Docker镜像
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, security-scan]
+    if: github.event_name == 'push'
+    
+    strategy:
+      matrix:
+        service: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.service }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./magicstar-${{ matrix.service }}
+          file: ./magicstar-${{ matrix.service }}/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # 部署到开发环境
+  deploy-dev:
+    name: Deploy to Development
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment: dev
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to development server
+        run: |
+          echo "Deploying to development environment..."
+          # 这里添加实际的部署脚本
+          # 例如：kubectl apply -f k8s/dev/ 或者 docker-compose up -d
+
+  # 部署到生产环境
+  deploy-prod:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: prod
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to production server
+        run: |
+          echo "Deploying to production environment..."
+          # 这里添加实际的部署脚本
+          # 例如：kubectl apply -f k8s/prod/ 或者 docker-compose -f docker-compose.prod.yml up -d
+
+  # 通知
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs: [deploy-dev, deploy-prod]
+    if: always()
+    
+    steps:
+      - name: Notify deployment status
+        run: |
+          if [ "${{ needs.deploy-dev.result }}" == "success" ] || [ "${{ needs.deploy-prod.result }}" == "success" ]; then
+            echo "Deployment successful!"
+            # 这里可以添加通知逻辑，如发送邮件、Slack消息等
+          else
+            echo "Deployment failed!"
+            # 这里可以添加失败通知逻辑
+          fi

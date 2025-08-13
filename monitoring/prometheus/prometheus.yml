@@ -1,0 +1,99 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'magicstar-monitor'
+
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Prometheus自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Node Exporter (系统指标)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  # cAdvisor (容器指标)
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  # 后端应用监控
+  - job_name: 'magicstar-backend'
+    static_configs:
+      - targets: ['backend:3001']
+    scrape_interval: 10s
+    metrics_path: /metrics
+    scrape_timeout: 5s
+
+  # 前端应用监控 (如果有metrics endpoint)
+  - job_name: 'magicstar-frontend'
+    static_configs:
+      - targets: ['frontend:80']
+    scrape_interval: 30s
+    metrics_path: /metrics
+    scrape_timeout: 5s
+
+  # MySQL监控 (需要mysql_exporter)
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysql-exporter:9104']
+    scrape_interval: 10s
+
+  # Redis监控 (需要redis_exporter)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 10s
+
+  # Nginx监控 (需要nginx-prometheus-exporter)
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+    scrape_interval: 10s
+
+  # Elasticsearch监控
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['elasticsearch:9200']
+    scrape_interval: 30s
+    metrics_path: /_prometheus/metrics
+
+  # Jaeger监控
+  - job_name: 'jaeger'
+    static_configs:
+      - targets: ['jaeger:14269']
+    scrape_interval: 15s
+    metrics_path: /metrics
+
+  # 黑盒监控 (外部服务可用性)
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - http://frontend:80/health
+        - http://backend:3001/health
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115

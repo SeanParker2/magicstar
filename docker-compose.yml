@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  # 后端服务
+  backend:
+    build:
+      context: ./magicstar-backend
+      dockerfile: Dockerfile
+    container_name: magicstar-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - APP_PORT=3001
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=magicstar
+      - DB_PASSWORD=magicstar123
+      - DB_DATABASE=magicstar
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - magicstar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 前端服务
+  frontend:
+    build:
+      context: ./magicstar-frontend
+      dockerfile: Dockerfile
+    container_name: magicstar-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - magicstar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: magicstar-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=magicstar
+      - MYSQL_USER=magicstar
+      - MYSQL_PASSWORD=magicstar123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - magicstar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: magicstar-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - magicstar-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Nginx反向代理（生产环境）
+  nginx:
+    image: nginx:alpine
+    container_name: magicstar-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - magicstar-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  magicstar-network:
+    driver: bridge

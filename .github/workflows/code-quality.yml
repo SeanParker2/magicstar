@@ -1,0 +1,173 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # ESLint检查
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: magicstar-${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm run lint -- --format=@microsoft/eslint-formatter-sarif --output-file=eslint-results.sarif
+        continue-on-error: true
+
+      - name: Upload ESLint results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: magicstar-${{ matrix.project }}/eslint-results.sarif
+          wait-for-processing: true
+
+  # Prettier格式检查
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: magicstar-${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm ci
+
+      - name: Check Prettier formatting
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm run format:check
+
+  # TypeScript类型检查
+  typecheck:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: magicstar-${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm ci
+
+      - name: Run TypeScript type check
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npx tsc --noEmit
+
+  # 依赖安全检查
+  audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: magicstar-${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm ci
+
+      - name: Run security audit
+        run: |
+          cd magicstar-${{ matrix.project }}
+          npm audit --audit-level=moderate
+
+  # 代码复杂度分析
+  complexity:
+    name: Code Complexity
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install complexity analyzer
+        run: npm install -g complexity-report
+
+      - name: Analyze backend complexity
+        run: |
+          cd magicstar-backend
+          find src -name "*.ts" -not -path "*/node_modules/*" | xargs cr --format json > complexity-backend.json
+        continue-on-error: true
+
+      - name: Analyze frontend complexity
+        run: |
+          cd magicstar-frontend
+          find src -name "*.ts" -o -name "*.tsx" -not -path "*/node_modules/*" | xargs cr --format json > complexity-frontend.json
+        continue-on-error: true
+
+      - name: Upload complexity reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: complexity-reports
+          path: |
+            magicstar-backend/complexity-backend.json
+            magicstar-frontend/complexity-frontend.json

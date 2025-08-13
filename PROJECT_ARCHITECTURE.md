@@ -299,14 +299,67 @@ __tests__/
 
 ---
 
-## 部署架构（规划）
+## 部署架构
+
+### 容器化部署
+- **Docker容器化**：前后端应用完全容器化
+  - 生产环境Dockerfile：多阶段构建，优化镜像大小
+  - 开发环境Dockerfile：支持热重载和调试
+  - 健康检查：内置应用健康检查机制
+- **Docker Compose**：多环境编排
+  - `docker-compose.yml`：生产环境配置
+  - `docker-compose.dev.yml`：开发环境配置
+  - `docker-compose.monitoring.yml`：监控系统配置
+- **多环境支持**：开发、测试、预生产、生产环境隔离
+
+### CI/CD流水线
+- **GitHub Actions自动化**：
+  - `ci-cd.yml`：主要CI/CD流水线
+  - `code-quality.yml`：代码质量检查
+  - `test.yml`：自动化测试套件
+- **代码质量检查**：
+  - ESLint代码规范检查
+  - Prettier格式化检查
+  - TypeScript类型检查
+  - 安全漏洞扫描
+- **自动化测试**：
+  - 单元测试（Jest）
+  - 集成测试（数据库+Redis）
+  - E2E测试（Playwright）
+  - 性能测试（k6）
+- **自动部署**：
+  - 容器镜像构建和推送
+  - 多环境自动部署
+  - 部署状态通知
+
+### 监控与日志
+- **Prometheus监控**：
+  - 应用指标收集
+  - 系统资源监控
+  - 自定义业务指标
+  - 告警规则配置
+- **Grafana可视化**：
+  - 实时监控面板
+  - 业务指标展示
+  - 告警状态可视化
+- **ELK日志收集**：
+  - Elasticsearch：日志存储
+  - Logstash：日志处理
+  - Kibana：日志查询和分析
+  - Filebeat：日志收集
+- **分布式追踪**：Jaeger链路追踪
+- **告警通知**：
+  - 邮件告警
+  - Slack/钉钉/企业微信集成
+  - 多级告警策略
+  - 告警抑制规则
 
 ### 开发环境
 - **前端**: 本地开发服务器 (Taro dev server)
 - **后端**: 本地Node.js服务器 (Nest.js dev mode)
 - **数据库**: 本地MySQL + Redis
 
-### 生产环境（待实施）
+### 生产环境
 - **容器化**: Docker + Docker Compose
 - **反向代理**: Nginx
 - **数据库**: 云数据库MySQL + Redis

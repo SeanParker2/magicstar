@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # 开发环境后端服务
+  backend-dev:
+    build:
+      context: ./magicstar-backend
+      dockerfile: Dockerfile.dev
+    container_name: magicstar-backend-dev
+    ports:
+      - "3001:3001"
+      - "9229:9229"  # Node.js调试端口
+    environment:
+      - NODE_ENV=development
+      - APP_PORT=3001
+      - DB_HOST=mysql-dev
+      - DB_PORT=3306
+      - DB_USERNAME=magicstar
+      - DB_PASSWORD=magicstar123
+      - DB_DATABASE=magicstar_dev
+      - REDIS_HOST=redis-dev
+      - REDIS_PORT=6379
+      - JWT_SECRET=dev-jwt-secret-key
+    volumes:
+      - ./magicstar-backend/src:/app/src
+      - ./magicstar-backend/package.json:/app/package.json
+      - /app/node_modules
+    depends_on:
+      - mysql-dev
+      - redis-dev
+    networks:
+      - magicstar-dev-network
+    restart: unless-stopped
+    command: npm run start:dev
+
+  # 开发环境MySQL数据库
+  mysql-dev:
+    image: mysql:8.0
+    container_name: magicstar-mysql-dev
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=magicstar_dev
+      - MYSQL_USER=magicstar
+      - MYSQL_PASSWORD=magicstar123
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - magicstar-dev-network
+    restart: unless-stopped
+
+  # 开发环境Redis缓存
+  redis-dev:
+    image: redis:7-alpine
+    container_name: magicstar-redis-dev
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - magicstar-dev-network
+    restart: unless-stopped
+
+  # 开发工具 - Adminer (数据库管理)
+  adminer:
+    image: adminer:latest
+    container_name: magicstar-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-dev
+    networks:
+      - magicstar-dev-network
+    restart: unless-stopped
+
+  # 开发工具 - Redis Commander (Redis管理)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: magicstar-redis-commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis-dev:6379
+    depends_on:
+      - redis-dev
+    networks:
+      - magicstar-dev-network
+    restart: unless-stopped
+
+volumes:
+  mysql_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+
+networks:
+  magicstar-dev-network:
+    driver: bridge

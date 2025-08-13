@@ -1,3 +1,5 @@
+请你每次在进行任务之前，都先检查一下PROJECT_ARCHITECTURE.md与TASK_ROADMAP.md，并在完成任务之后，及时更新这两份文档
+
 ## 技术架构规范
 
 ### 1. 前端技术栈
