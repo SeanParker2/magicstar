@@ -1,6 +1,7 @@
-import { Entity, Column, Index } from 'typeorm';
+import { Entity, Column, Index, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { Exclude } from 'class-transformer';
+import { Role } from './role.entity';
 
 export enum UserGender {
   MALE = 'male',
@@ -12,6 +13,14 @@ export enum UserStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
   BANNED = 'banned',
+  PENDING_VERIFICATION = 'pending_verification',
+}
+
+export enum LoginType {
+  PASSWORD = 'password',
+  PHONE_SMS = 'phone_sms',
+  WECHAT = 'wechat',
+  EMAIL = 'email',
 }
 
 @Entity('users')
@@ -39,8 +48,8 @@ export class User extends BaseEntity {
   avatar?: string;
 
   @Column({
-    type: 'enum',
-    enum: UserGender,
+    type: 'varchar',
+    length: 10,
     nullable: true,
     comment: '性别',
   })
@@ -59,8 +68,8 @@ export class User extends BaseEntity {
   bio?: string;
 
   @Column({
-    type: 'enum',
-    enum: UserStatus,
+    type: 'varchar',
+    length: 30,
     default: UserStatus.ACTIVE,
     comment: '用户状态',
   })
@@ -92,4 +101,65 @@ export class User extends BaseEntity {
 
   @Column({ type: 'json', nullable: true, comment: '第三方登录信息' })
   thirdPartyInfo?: Record<string, any>;
+
+  @Column({ type: 'varchar', length: 255, nullable: true, comment: '邮箱验证令牌' })
+  @Exclude()
+  emailVerificationToken?: string;
+
+  @Column({ type: 'datetime', nullable: true, comment: '邮箱验证令牌过期时间' })
+  emailVerificationExpires?: Date;
+
+  @Column({ type: 'varchar', length: 255, nullable: true, comment: '密码重置令牌' })
+  @Exclude()
+  passwordResetToken?: string;
+
+  @Column({ type: 'datetime', nullable: true, comment: '密码重置令牌过期时间' })
+  passwordResetExpires?: Date;
+
+  @Column({ type: 'varchar', length: 10, nullable: true, comment: '短信验证码' })
+  @Exclude()
+  smsCode?: string;
+
+  @Column({ type: 'datetime', nullable: true, comment: '短信验证码过期时间' })
+  smsCodeExpires?: Date;
+
+  @Column({ type: 'int', default: 0, comment: '登录失败次数' })
+  loginFailCount: number;
+
+  @Column({ type: 'datetime', nullable: true, comment: '账号锁定到期时间' })
+  lockedUntil?: Date;
+
+  @Column({ type: 'json', nullable: true, comment: '安全设置' })
+  securitySettings?: {
+    twoFactorEnabled?: boolean;
+    loginNotification?: boolean;
+    allowMultipleLogin?: boolean;
+  };
+
+  @ManyToMany(() => Role, (role) => role.users, { eager: true })
+  @JoinTable({
+    name: 'user_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: Role[];
+
+  // 虚拟属性：检查账号是否被锁定
+  get isLocked(): boolean {
+    return !!(this.lockedUntil && this.lockedUntil > new Date());
+  }
+
+  // 虚拟属性：获取用户所有权限
+  get permissions(): string[] {
+    if (!this.roles || this.roles.length === 0) {
+      return [];
+    }
+    const permissions = new Set<string>();
+    this.roles.forEach(role => {
+      if (role.isActive && role.permissions) {
+        role.permissions.forEach(permission => permissions.add(permission));
+      }
+    });
+    return Array.from(permissions);
+  }
 }

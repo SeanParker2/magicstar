@@ -11,6 +11,11 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { DivinationModule } from './modules/divination/divination.module';
+import { FortuneModule } from './fortune/fortune.module';
+import { ShopModule } from './modules/shop/shop.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
@@ -19,9 +24,14 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
       load: [configuration],
       envFilePath: ['.env.local', '.env'],
     }),
-    // DatabaseModule, // 暂时禁用数据库连接
+    DatabaseModule, // 启用数据库连接
     // UserModule,
     // AuthModule,
+    // DivinationModule,
+    // FortuneModule,
+    ShopModule,
+    PaymentModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [

@@ -10,22 +10,21 @@ export abstract class BaseEntity {
   id: string;
 
   @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
     comment: '创建时间',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
     comment: '更新时间',
   })
   updatedAt: Date;
 
   @DeleteDateColumn({
-    type: 'timestamp',
+    type: 'datetime',
     nullable: true,
     comment: '删除时间',
   })

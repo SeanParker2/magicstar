@@ -54,11 +54,7 @@ export class PaginatedResponseDto<T> extends ResponseDto<T[]> {
   @ApiProperty({ description: '分页信息' })
   pagination: PaginationDto;
 
-  constructor(
-    data: T[],
-    pagination: PaginationDto,
-    message = '查询成功',
-  ) {
+  constructor(data: T[], pagination: PaginationDto, message = '查询成功') {
     super(200, message, data);
     this.pagination = pagination;
   }

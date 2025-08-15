@@ -20,8 +20,14 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateAvatarDto } from './dto/update-avatar.dto';
+import { ChangePasswordDto } from './dto/update-security.dto';
 import { PaginationQueryDto } from '../../common/dto/pagination.dto';
-import { ResponseDto, PaginatedResponseDto } from '../../common/dto/response.dto';
+import {
+  ResponseDto,
+  PaginatedResponseDto,
+} from '../../common/dto/response.dto';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { Public } from '../../decorators/public.decorator';
 import { CurrentUser } from '../../decorators/user.decorator';
@@ -124,5 +130,94 @@ export class UserController {
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.userService.remove(id);
     return ResponseDto.success(null, '用户删除成功');
+  }
+
+  @Patch('profile/info')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '更新个人资料' })
+  @ApiResponse({
+    status: 200,
+    description: '个人资料更新成功',
+    type: ResponseDto<User>,
+  })
+  async updateProfileInfo(
+    @CurrentUser() user: User,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    const updatedUser = await this.userService.updateProfile(
+      user.id,
+      updateProfileDto,
+    );
+    return ResponseDto.success(updatedUser, '个人资料更新成功');
+  }
+
+  @Patch('profile/avatar')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '更新头像' })
+  @ApiResponse({
+    status: 200,
+    description: '头像更新成功',
+    type: ResponseDto<User>,
+  })
+  async updateAvatar(
+    @CurrentUser() user: User,
+    @Body() updateAvatarDto: UpdateAvatarDto,
+  ) {
+    const updatedUser = await this.userService.updateAvatar(
+      user.id,
+      updateAvatarDto,
+    );
+    return ResponseDto.success(updatedUser, '头像更新成功');
+  }
+
+  @Post('profile/change-password')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '修改密码' })
+  @ApiResponse({
+    status: 200,
+    description: '密码修改成功',
+    type: ResponseDto,
+  })
+  async changePassword(
+    @CurrentUser() user: User,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    await this.userService.changePassword(user.id, changePasswordDto);
+    return ResponseDto.success(null, '密码修改成功');
+  }
+
+  @Get('profile/security')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '获取账号安全设置' })
+  @ApiResponse({
+    status: 200,
+    description: '获取安全设置成功',
+    type: ResponseDto,
+  })
+  async getSecuritySettings(@CurrentUser() user: User) {
+    const settings = await this.userService.getSecuritySettings(user.id);
+    return ResponseDto.success(settings, '获取安全设置成功');
+  }
+
+  @Patch('profile/phone')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '更新手机号' })
+  @ApiResponse({
+    status: 200,
+    description: '手机号更新成功',
+    type: ResponseDto<User>,
+  })
+  async updatePhoneNumber(
+    @CurrentUser() user: User,
+    @Body() body: { phone: string; code: string },
+  ) {
+    // TODO: 验证短信验证码
+    // await this.smsService.verifyCode(body.phone, body.code);
+    
+    const updatedUser = await this.userService.updatePhoneNumber(
+      user.id,
+      body.phone,
+    );
+    return ResponseDto.success(updatedUser, '手机号更新成功');
   }
 }

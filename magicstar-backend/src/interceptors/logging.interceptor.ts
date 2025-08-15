@@ -27,9 +27,7 @@ export class LoggingInterceptor implements NestInterceptor {
       tap(() => {
         const endTime = Date.now();
         const duration = endTime - startTime;
-        this.logger.log(
-          `Request Completed: ${method} ${url} - ${duration}ms`,
-        );
+        this.logger.log(`Request Completed: ${method} ${url} - ${duration}ms`);
       }),
     );
   }

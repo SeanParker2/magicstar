@@ -1,0 +1,160 @@
+.divination-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #6366f1 0%, #f8fafc 30%);
+}
+
+.divination-header {
+  text-align: center;
+  padding: 40px 20px 30px;
+  color: white;
+  
+  .header-title {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .header-subtitle {
+    display: block;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+  }
+}
+
+.divination-content {
+  padding: 0 20px 20px;
+  
+  .daily-fortune-card {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    .daily-fortune {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      
+      .fortune-item {
+        text-align: center;
+        flex: 1;
+        
+        .fortune-label {
+          display: block;
+          font-size: 12px;
+          color: #666;
+          margin-bottom: 5px;
+        }
+        
+        .fortune-value {
+          display: block;
+          font-size: 14px;
+          font-weight: bold;
+          color: #6366f1;
+        }
+      }
+    }
+  }
+  
+  .divination-types {
+    margin-bottom: 20px;
+    
+    .section-title {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+      padding-left: 5px;
+    }
+    
+    .at-grid {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      
+      .at-grid-item {
+        padding: 20px 15px;
+        border: none;
+        
+        &:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .at-grid-item__content {
+          .at-grid-item__content-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+          }
+          
+          .at-grid-item__content-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+          }
+        }
+        
+        // 添加描述文本样式
+        &::after {
+          content: attr(data-description);
+          display: block;
+          font-size: 12px;
+          color: #999;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+  
+  .tips-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    
+    .tips-content {
+      .tip-text {
+        display: block;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 8px;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+// 自定义网格项样式
+.at-grid-item {
+  position: relative;
+  
+  &[data-value="tarot"]::after {
+    content: "通过塔罗牌探索内心世界";
+  }
+  
+  &[data-value="astrology"]::after {
+    content: "根据星座运势指引人生";
+  }
+  
+  &[data-value="fortune"]::after {
+    content: "预测未来运势走向";
+  }
+  
+  &[data-value="love"]::after {
+    content: "探索爱情的奥秘";
+  }
+  
+  &[data-value="career"]::after {
+    content: "指引事业发展方向";
+  }
+  
+  &[data-value="wealth"]::after {
+    content: "洞察财富运势";
+  }
+}

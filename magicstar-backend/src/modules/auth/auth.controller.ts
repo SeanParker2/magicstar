@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Req,
-  Patch,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Patch } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -14,27 +7,14 @@ import {
 } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { AuthService } from './auth.service';
-import { LoginDto, LoginResponseDto } from './dto/login.dto';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { LoginDto, LoginResponseDto, RefreshTokenDto, ChangePasswordDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 import { ResponseDto } from '../../common/dto/response.dto';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { Public } from '../../decorators/public.decorator';
 import { CurrentUser } from '../../decorators/user.decorator';
 import { User } from '../user/entities/user.entity';
-import { IsString, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
 
-class ChangePasswordDto {
-  @ApiProperty({ description: '原密码' })
-  @IsString({ message: '原密码必须是字符串' })
-  @MinLength(6, { message: '原密码至少6个字符' })
-  oldPassword: string;
-
-  @ApiProperty({ description: '新密码' })
-  @IsString({ message: '新密码必须是字符串' })
-  @MinLength(6, { message: '新密码至少6个字符' })
-  newPassword: string;
-}
 
 @ApiTags('认证')
 @Controller('auth')
@@ -50,8 +30,8 @@ export class AuthController {
     description: '注册成功',
     type: ResponseDto<LoginResponseDto>,
   })
-  async register(@Body() createUserDto: CreateUserDto) {
-    const result = await this.authService.register(createUserDto);
+  async register(@Body() registerDto: RegisterDto) {
+    const result = await this.authService.register(registerDto);
     return ResponseDto.success(result, '注册成功');
   }
 
@@ -77,8 +57,8 @@ export class AuthController {
     description: '令牌刷新成功',
     type: ResponseDto<LoginResponseDto>,
   })
-  async refresh(@CurrentUser() user: User) {
-    const result = await this.authService.refreshToken(user);
+  async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    const result = await this.authService.refreshToken(refreshTokenDto);
     return ResponseDto.success(result, '令牌刷新成功');
   }
 
@@ -94,10 +74,9 @@ export class AuthController {
     @CurrentUser() user: User,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
-    await this.authService.changePassword(
+    const result = await this.authService.changePassword(
       user.id,
-      changePasswordDto.oldPassword,
-      changePasswordDto.newPassword,
+      changePasswordDto
     );
     return ResponseDto.success(null, '密码修改成功');
   }

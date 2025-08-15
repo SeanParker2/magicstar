@@ -1,0 +1,143 @@
+// 懒加载路由样式
+.lazy-route-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.lazy-route-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #6366f1;
+  border-radius: 50%;
+  animation: lazy-route-spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.lazy-route-text {
+  color: #666;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+@keyframes lazy-route-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// 错误状态样式
+.lazy-route-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.lazy-route-error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.lazy-route-error-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.lazy-route-error-message {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.lazy-route-error-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background-color: #6366f1;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: #5856eb;
+  }
+  
+  &:active {
+    background-color: #4f46e5;
+    transform: translateY(1px);
+  }
+}
+
+// 骨架屏样式
+.lazy-route-skeleton {
+  padding: 20px;
+  
+  .skeleton-item {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: lazy-route-skeleton 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    
+    &.skeleton-title {
+      height: 20px;
+      width: 60%;
+    }
+    
+    &.skeleton-text {
+      height: 16px;
+      width: 100%;
+      
+      &:last-child {
+        width: 80%;
+      }
+    }
+    
+    &.skeleton-image {
+      height: 120px;
+      width: 100%;
+    }
+  }
+}
+
+@keyframes lazy-route-skeleton {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// 渐入动画
+.lazy-route-fade-in {
+  animation: lazy-route-fade-in 0.3s ease-in-out;
+}
+
+@keyframes lazy-route-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

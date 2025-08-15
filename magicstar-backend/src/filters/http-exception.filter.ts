@@ -25,7 +25,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      
+
       if (typeof exceptionResponse === 'string') {
         message = exceptionResponse;
       } else if (typeof exceptionResponse === 'object') {
@@ -37,16 +37,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     // 记录错误日志
-    this.logger.error(
-      `HTTP ${status} Error: ${message}`,
-      {
-        url: request.url,
-        method: request.method,
-        ip: request.ip,
-        userAgent: request.get('User-Agent'),
-        stack: exception instanceof Error ? exception.stack : undefined,
-      },
-    );
+    this.logger.error(`HTTP ${status} Error: ${message}`, {
+      url: request.url,
+      method: request.method,
+      ip: request.ip,
+      userAgent: request.get('User-Agent'),
+      stack: exception instanceof Error ? exception.stack : undefined,
+    });
 
     // 构造响应
     const errorResponse = new ResponseDto(status, message, details);

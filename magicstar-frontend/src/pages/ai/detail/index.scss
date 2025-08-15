@@ -1,0 +1,642 @@
+.ai-detail {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+
+  &.loading {
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.error {
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e6e6e6;
+      border-top: 3px solid #6366f1;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+
+  .error-text {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .back-btn {
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+  }
+
+  // 头部区域
+  .header {
+    background: white;
+    padding: 16px;
+    border-bottom: 1px solid #e6e6e6;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    .title-section {
+      margin-bottom: 12px;
+
+      .title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .meta-info {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+
+        .type {
+          font-size: 12px;
+          color: #666;
+          background: #f0f0f0;
+          padding: 4px 8px;
+          border-radius: 4px;
+        }
+
+        .quality {
+          font-size: 12px;
+          font-weight: 600;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background: rgba(82, 196, 26, 0.1);
+        }
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      .action-btn {
+        background: #f8f9fa;
+        color: #6366f1;
+        border: 1px solid #e6e6e6;
+        border-radius: 6px;
+        font-size: 12px;
+        padding: 6px 12px;
+        min-width: auto;
+        height: auto;
+        line-height: 1.2;
+
+        &:active {
+          background: #e6e6e6;
+        }
+      }
+    }
+  }
+
+  // 标签页
+  .tabs {
+    background: white;
+    display: flex;
+    border-bottom: 1px solid #e6e6e6;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    .tab {
+      flex: 1;
+      min-width: 80px;
+      padding: 12px 8px;
+      text-align: center;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &.active {
+        border-bottom-color: #6366f1;
+        background: rgba(99, 102, 241, 0.05);
+      }
+
+      .tab-text {
+        font-size: 13px;
+        color: #666;
+        white-space: nowrap;
+      }
+
+      &.active .tab-text {
+        color: #6366f1;
+        font-weight: 600;
+      }
+    }
+  }
+
+  // 内容区域
+  .content {
+    flex: 1;
+    background: white;
+    padding: 16px;
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      display: block;
+    }
+  }
+
+  // 解读内容
+  .content-section {
+    .summary-section,
+    .detail-section,
+    .advice-section {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+
+      &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+    }
+
+    .summary-text,
+    .detail-text,
+    .advice-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+      text-align: justify;
+    }
+
+    .summary-text {
+      background: #f8f9ff;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #6366f1;
+    }
+
+    .advice-text {
+      background: #fff7e6;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #faad14;
+    }
+  }
+
+  // 技术信息
+  .metadata-section {
+    .metadata-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+      gap: 16px;
+
+      &.full-width {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .metadata-label {
+        font-size: 13px;
+        color: #666;
+        font-weight: 500;
+        min-width: 80px;
+      }
+
+      .metadata-value {
+        font-size: 13px;
+        color: #333;
+        text-align: right;
+        flex: 1;
+
+        &.prompt {
+          text-align: left;
+          background: #f8f9fa;
+          padding: 8px;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 12px;
+          line-height: 1.4;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+
+  // 质量评估
+  .quality-section {
+    .quality-overview {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9ff;
+      border-radius: 12px;
+      margin-bottom: 20px;
+
+      .quality-score {
+        font-size: 32px;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .quality-grade {
+        font-size: 16px;
+        color: #666;
+        font-weight: 500;
+      }
+    }
+
+    .quality-metrics {
+      margin-bottom: 20px;
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+
+        .metric-item {
+          text-align: center;
+          padding: 12px;
+          background: #f8f9fa;
+          border-radius: 8px;
+
+          .metric-label {
+            font-size: 12px;
+            color: #666;
+            display: block;
+            margin-bottom: 4px;
+          }
+
+          .metric-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+          }
+        }
+      }
+    }
+
+    .quality-feedback,
+    .quality-suggestions {
+      margin-bottom: 20px;
+
+      .feedback-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 8px;
+      }
+
+      .suggestion-item {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+    }
+  }
+
+  // 优化结果
+  .optimization-section {
+    .optimization-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .improvement-score {
+        font-size: 14px;
+        color: #52c41a;
+        font-weight: 600;
+        background: rgba(82, 196, 26, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+    }
+
+    .optimization-strategy,
+    .optimized-content,
+    .improvements {
+      margin-bottom: 20px;
+
+      .strategy-label {
+        font-size: 13px;
+        color: #666;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .strategy-text,
+      .optimized-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 8px;
+      }
+
+      .improvement-item {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+      }
+    }
+  }
+
+  // 底部操作
+  .bottom-actions {
+    background: white;
+    padding: 16px;
+    border-top: 1px solid #e6e6e6;
+    display: flex;
+    gap: 12px;
+    position: sticky;
+    bottom: 0;
+
+    .action-btn {
+      flex: 1;
+      height: 44px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+
+      &.share {
+        background: #f8f9fa;
+        color: #333;
+        border: 1px solid #e6e6e6;
+      }
+
+      &.feedback {
+        background: #6366f1;
+        color: white;
+      }
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  // 反馈弹窗
+  .feedback-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e6e6e6;
+
+        .modal-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+        }
+
+        .close-btn {
+          background: #f8f9fa;
+          color: #666;
+          border: 1px solid #e6e6e6;
+          border-radius: 4px;
+          font-size: 12px;
+          padding: 4px 8px;
+          min-width: auto;
+          height: auto;
+        }
+      }
+
+      .feedback-form {
+        padding: 20px;
+
+        .form-label {
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
+          margin-bottom: 8px;
+          display: block;
+        }
+
+        .rating-section,
+        .helpful-section,
+        .tags-section,
+        .comment-section {
+          margin-bottom: 20px;
+        }
+
+        .rating-stars {
+          display: flex;
+          gap: 4px;
+
+          .star {
+            font-size: 24px;
+            color: #e6e6e6;
+            cursor: pointer;
+            transition: color 0.2s;
+
+            &.active {
+              color: #faad14;
+            }
+          }
+        }
+
+        .helpful-options {
+          display: flex;
+          gap: 8px;
+
+          .helpful-btn {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #e6e6e6;
+            border-radius: 6px;
+            font-size: 12px;
+            padding: 6px 12px;
+            min-width: auto;
+            height: auto;
+
+            &.active {
+              background: #6366f1;
+              color: white;
+              border-color: #6366f1;
+            }
+          }
+        }
+
+        .tags-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+
+          .tag-item {
+            background: #f8f9fa;
+            border: 1px solid #e6e6e6;
+            border-radius: 16px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &.active {
+              background: #6366f1;
+              border-color: #6366f1;
+
+              .tag-text {
+                color: white;
+              }
+            }
+
+            .tag-text {
+              font-size: 12px;
+              color: #666;
+            }
+          }
+        }
+
+        .comment-input {
+          width: 100%;
+          min-height: 80px;
+          padding: 12px;
+          border: 1px solid #e6e6e6;
+          border-radius: 8px;
+          font-size: 14px;
+          line-height: 1.4;
+          resize: vertical;
+          background: #f8f9fa;
+        }
+
+        .submit-btn {
+          width: 100%;
+          height: 44px;
+          background: #6366f1;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          margin-top: 8px;
+
+          &:active {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// 响应式设计
+@media (max-width: 480px) {
+  .ai-detail {
+    .header {
+      padding: 12px;
+
+      .action-buttons {
+        .action-btn {
+          font-size: 11px;
+          padding: 4px 8px;
+        }
+      }
+    }
+
+    .content {
+      padding: 12px;
+
+      .section-title {
+        font-size: 14px;
+      }
+    }
+
+    .quality-section {
+      .quality-overview {
+        padding: 16px;
+
+        .quality-score {
+          font-size: 28px;
+        }
+      }
+
+      .quality-metrics {
+        .metrics-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    }
+
+    .feedback-modal {
+      padding: 12px;
+
+      .modal-content {
+        .feedback-form {
+          padding: 16px;
+
+          .rating-stars {
+            .star {
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
