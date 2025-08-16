@@ -10,6 +10,7 @@ import { Planet } from './entities/planet.entity';
 import { House } from './entities/house.entity';
 import { Aspect } from './entities/aspect.entity';
 import { ChartInterpretation } from './entities/chart-interpretation.entity';
+import { MonitoringModule } from '../../monitoring/monitoring.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ChartInterpretation } from './entities/chart-interpretation.entity';
       ChartInterpretation,
     ]),
     HttpModule,
+    MonitoringModule,
   ],
   controllers: [AstrologyController],
   providers: [

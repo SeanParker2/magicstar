@@ -12,12 +12,14 @@ import { PaymentLoggerService } from './services/payment-logger.service';
 import { PaymentController } from './controllers/payment.controller';
 import { WechatPaymentController } from './controllers/wechat-payment.controller';
 import { AlipayController } from './controllers/alipay.controller';
+import { MonitoringModule } from '../monitoring/monitoring.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Payment, PaymentRecord]),
     HttpModule,
     ConfigModule,
+    MonitoringModule,
   ],
   controllers: [
     PaymentController,
@@ -32,6 +34,7 @@ import { AlipayController } from './controllers/alipay.controller';
     PaymentLoggerService,
   ],
   exports: [
+    TypeOrmModule,
     PaymentService,
     WechatPaymentService,
     AlipayService,

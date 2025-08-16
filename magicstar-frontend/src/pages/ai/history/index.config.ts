@@ -4,5 +4,5 @@ export default definePageConfig({
   navigationBarTextStyle: 'white',
   backgroundColor: '#1a1a2e',
   enablePullDownRefresh: true,
-  onReachBottomDistance: 50
-})
+  onReachBottomDistance: 50,
+});

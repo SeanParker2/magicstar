@@ -1,0 +1,729 @@
+.product-category {
+  width: 100%;
+  background: #fff;
+
+  &.scrollable {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  // 网格模式
+  &.mode-grid {
+    .category-grid {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      grid-template-columns: repeat(4, 1fr);
+
+      .category-grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 8px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        min-height: 80px;
+        justify-content: center;
+
+        &:hover {
+          background: #e9ecef;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        &.selected {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: #fff;
+
+          .category-name {
+            color: #fff;
+          }
+
+          .category-icon {
+            .at-icon {
+              color: #fff;
+            }
+          }
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            background: #f8f9fa;
+            transform: none;
+            box-shadow: none;
+          }
+        }
+
+        .category-icon {
+          margin-bottom: 8px;
+
+          .at-icon {
+            color: #667eea;
+            transition: color 0.3s ease;
+          }
+
+          &.default {
+            .at-icon {
+              color: #999;
+            }
+          }
+        }
+
+        .category-image {
+          width: 32px;
+          height: 32px;
+          margin-bottom: 8px;
+          border-radius: 4px;
+          overflow: hidden;
+
+          image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .category-name {
+          font-size: 12px;
+          color: #333;
+          text-align: center;
+          line-height: 1.2;
+          font-weight: 500;
+          transition: color 0.3s ease;
+        }
+
+        .at-badge {
+          position: absolute;
+          top: 4px;
+          right: 4px;
+        }
+      }
+    }
+  }
+
+  // 列表模式
+  &.mode-list {
+    .category-list {
+      padding: 8px 0;
+
+      .category-list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:hover {
+          background: #f8f9fa;
+        }
+
+        &.selected {
+          background: #f0f4ff;
+          border-left: 4px solid #667eea;
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            background: transparent;
+          }
+        }
+
+        .category-info {
+          display: flex;
+          align-items: center;
+          flex: 1;
+          gap: 12px;
+
+          .category-icon {
+            .at-icon {
+              color: #667eea;
+            }
+
+            &.default {
+              .at-icon {
+                color: #999;
+              }
+            }
+          }
+
+          .category-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            overflow: hidden;
+
+            image {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .category-details {
+            flex: 1;
+
+            .category-name {
+              font-size: 16px;
+              color: #333;
+              font-weight: 600;
+              margin-bottom: 4px;
+              display: block;
+            }
+
+            .category-description {
+              font-size: 12px;
+              color: #666;
+              line-height: 1.4;
+              display: block;
+            }
+          }
+        }
+
+        .category-extra {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+      }
+    }
+  }
+
+  // 树形模式
+  &.mode-tree {
+    .category-tree {
+      padding: 8px 0;
+
+      .tree-node {
+        .tree-node-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 20px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          border-bottom: 1px solid #f8f8f8;
+
+          &:hover {
+            background: #f8f9fa;
+          }
+
+          &.selected {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+          }
+
+          &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+
+            &:hover {
+              background: transparent;
+            }
+          }
+
+          .tree-node-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            gap: 8px;
+
+            .tree-expand-icon {
+              width: 20px;
+              display: flex;
+              justify-content: center;
+            }
+
+            .category-icon {
+              .at-icon {
+                color: #667eea;
+              }
+
+              &.default {
+                .at-icon {
+                  color: #999;
+                }
+              }
+            }
+
+            .category-image {
+              width: 24px;
+              height: 24px;
+              border-radius: 4px;
+              overflow: hidden;
+
+              image {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .category-name {
+              font-size: 14px;
+              color: #333;
+              font-weight: 500;
+            }
+          }
+
+          .tree-node-extra {
+            display: flex;
+            align-items: center;
+          }
+        }
+
+        .tree-children {
+          background: #fafafa;
+          border-left: 2px solid #e0e0e0;
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+
+  // 标签页模式
+  &.mode-tabs {
+    .category-tabs {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .tabs-header {
+        border-bottom: 1px solid #e0e0e0;
+        background: #fff;
+        flex-shrink: 0;
+
+        .tabs-list {
+          display: flex;
+          padding: 0 16px;
+          white-space: nowrap;
+
+          .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            min-width: 80px;
+
+            &:hover {
+              background: #f8f9fa;
+            }
+
+            &.active {
+              border-bottom-color: #667eea;
+              background: #f0f4ff;
+
+              .tab-name {
+                color: #667eea;
+                font-weight: 600;
+              }
+
+              .category-icon {
+                .at-icon {
+                  color: #667eea;
+                }
+              }
+            }
+
+            &.disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+
+              &:hover {
+                background: transparent;
+              }
+            }
+
+            .category-icon {
+              margin-bottom: 4px;
+
+              .at-icon {
+                color: #999;
+                transition: color 0.3s ease;
+              }
+            }
+
+            .category-image {
+              width: 24px;
+              height: 24px;
+              margin-bottom: 4px;
+              border-radius: 4px;
+              overflow: hidden;
+
+              image {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .tab-name {
+              font-size: 12px;
+              color: #666;
+              text-align: center;
+              transition: all 0.3s ease;
+            }
+
+            .at-badge {
+              position: absolute;
+              top: 4px;
+              right: 4px;
+            }
+          }
+        }
+      }
+
+      .tabs-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+
+        .subcategory-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+
+          .subcategory-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: #fff;
+
+            &:hover {
+              border-color: #667eea;
+              box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+            }
+
+            &.selected {
+              border-color: #667eea;
+              background: #f0f4ff;
+              box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+            }
+
+            &.disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+
+              &:hover {
+                border-color: #e0e0e0;
+                box-shadow: none;
+              }
+            }
+
+            .category-icon {
+              margin-bottom: 8px;
+
+              .at-icon {
+                color: #667eea;
+              }
+
+              &.default {
+                .at-icon {
+                  color: #999;
+                }
+              }
+            }
+
+            .category-image {
+              width: 32px;
+              height: 32px;
+              margin-bottom: 8px;
+              border-radius: 4px;
+              overflow: hidden;
+
+              image {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .subcategory-name {
+              font-size: 14px;
+              color: #333;
+              text-align: center;
+              font-weight: 500;
+            }
+
+            .at-badge {
+              position: absolute;
+              top: 4px;
+              right: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 加载状态
+  .category-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 16px;
+
+    .loading-text {
+      font-size: 14px;
+      color: #999;
+    }
+  }
+
+  // 错误状态
+  .category-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 16px;
+
+    .error-text {
+      font-size: 14px;
+      color: #f44336;
+      text-align: center;
+    }
+  }
+
+  // 空状态
+  .category-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 16px;
+
+    .empty-text {
+      font-size: 14px;
+      color: #999;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .product-category {
+    &.mode-grid {
+      .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 12px;
+
+        .category-grid-item {
+          padding: 8px 4px;
+          min-height: 70px;
+
+          .category-name {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+
+    &.mode-list {
+      .category-list {
+        .category-list-item {
+          padding: 12px 16px;
+
+          .category-info {
+            gap: 8px;
+
+            .category-image {
+              width: 32px;
+              height: 32px;
+            }
+
+            .category-details {
+              .category-name {
+                font-size: 14px;
+              }
+
+              .category-description {
+                font-size: 11px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.mode-tree {
+      .category-tree {
+        .tree-node {
+          .tree-node-item {
+            padding: 10px 16px;
+
+            .tree-node-content {
+              gap: 6px;
+
+              .category-image {
+                width: 20px;
+                height: 20px;
+              }
+
+              .category-name {
+                font-size: 13px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.mode-tabs {
+      .category-tabs {
+        .tabs-header {
+          .tabs-list {
+            padding: 0 12px;
+
+            .tab-item {
+              padding: 8px 12px;
+              min-width: 60px;
+
+              .category-image {
+                width: 20px;
+                height: 20px;
+              }
+
+              .tab-name {
+                font-size: 11px;
+              }
+            }
+          }
+        }
+
+        .tabs-content {
+          padding: 12px;
+
+          .subcategory-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+
+            .subcategory-item {
+              padding: 12px 6px;
+
+              .category-image {
+                width: 28px;
+                height: 28px;
+              }
+
+              .subcategory-name {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .category-loading,
+    .category-error,
+    .category-empty {
+      padding: 40px 20px;
+      gap: 12px;
+
+      .loading-text,
+      .error-text,
+      .empty-text {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+// 动画效果
+.product-category {
+  .category-grid-item,
+  .category-list-item,
+  .tree-node-item,
+  .tab-item,
+  .subcategory-item {
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .category-grid {
+    .category-grid-item {
+      &:nth-child(1) { animation-delay: 0.1s; }
+      &:nth-child(2) { animation-delay: 0.2s; }
+      &:nth-child(3) { animation-delay: 0.3s; }
+      &:nth-child(4) { animation-delay: 0.4s; }
+      &:nth-child(5) { animation-delay: 0.5s; }
+      &:nth-child(6) { animation-delay: 0.6s; }
+      &:nth-child(7) { animation-delay: 0.7s; }
+      &:nth-child(8) { animation-delay: 0.8s; }
+    }
+  }
+
+  .tree-children {
+    animation: slideDown 0.3s ease-out;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+// Taro UI 组件样式覆盖
+.product-category {
+  .at-badge {
+    .at-badge__num {
+      background: #ff6b6b;
+      color: #fff;
+      font-size: 10px;
+      min-width: 16px;
+      height: 16px;
+      line-height: 16px;
+      border-radius: 8px;
+    }
+  }
+
+  .at-activity-indicator {
+    .at-activity-indicator__content {
+      color: #667eea;
+    }
+  }
+
+  .at-icon {
+    transition: all 0.3s ease;
+  }
+}

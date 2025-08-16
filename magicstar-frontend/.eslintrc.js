@@ -1,7 +1,6 @@
 module.exports = {
   extends: [
     'taro/react',
-    '@typescript-eslint/recommended',
     'prettier',
     'plugin:prettier/recommended'
   ],

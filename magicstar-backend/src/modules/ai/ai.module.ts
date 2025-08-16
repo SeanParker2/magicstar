@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 import { AiController } from './controllers/ai.controller';
 import { InterpretationController } from './controllers/interpretation.controller';
 import { AiService } from './services/ai.service';
 import { OpenaiService } from './services/openai.service';
+import { BaiduService } from './services/baidu.service';
 import { PromptService } from './services/prompt.service';
 import { PromptEngineeringService } from './services/prompt-engineering.service';
 import { InterpretationService } from './services/interpretation.service';
@@ -17,11 +19,14 @@ import { AiLoggerService } from './services/ai-logger.service';
 import { AiRequest } from './entities/ai-request.entity';
 import { AiResponse } from './entities/ai-response.entity';
 import { PromptTemplate } from './entities/prompt-template.entity';
+import { MonitoringModule } from '../monitoring/monitoring.module';
 import aiConfig from './config/ai.config';
 
 @Module({
   imports: [
     ConfigModule.forFeature(aiConfig),
+    HttpModule,
+    MonitoringModule,
     TypeOrmModule.forFeature([
       AiRequest,
       AiResponse,
@@ -55,6 +60,7 @@ import aiConfig from './config/ai.config';
   providers: [
     AiService,
     OpenaiService,
+    BaiduService,
     PromptService,
     PromptEngineeringService,
     InterpretationService,
@@ -67,6 +73,7 @@ import aiConfig from './config/ai.config';
   exports: [
     AiService,
     OpenaiService,
+    BaiduService,
     PromptService,
     PromptEngineeringService,
     InterpretationService,

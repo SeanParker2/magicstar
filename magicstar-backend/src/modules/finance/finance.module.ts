@@ -13,6 +13,7 @@ import { RefundRecord } from './entities/refund-record.entity';
 import { ReconciliationRecord } from './entities/reconciliation-record.entity';
 import { PaymentModule } from '../payment/payment.module';
 import { UserModule } from '../user/user.module';
+import { ShopModule } from '../shop/shop.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UserModule } from '../user/user.module';
     ]),
     PaymentModule,
     UserModule,
+    ShopModule,
   ],
   controllers: [
     FinanceController,

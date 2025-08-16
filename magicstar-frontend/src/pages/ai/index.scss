@@ -1,0 +1,262 @@
+.ai-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-bottom: 20px;
+}
+
+.ai-header {
+  padding: 40px 20px 30px;
+  text-align: center;
+  color: white;
+
+  .ai-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .ai-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    display: block;
+  }
+}
+
+.ai-tabs {
+  display: flex;
+  margin: 0 20px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 4px;
+
+  .ai-tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    Text {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    &.active {
+      background: white;
+      
+      Text {
+        color: #6366f1;
+      }
+    }
+  }
+}
+
+.ai-content {
+  height: calc(100vh - 200px);
+  padding: 0 20px;
+}
+
+// 历史记录样式
+.ai-history {
+  .ai-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: white;
+    font-size: 16px;
+  }
+
+  .ai-records {
+    .ai-record-item {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      .record-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+
+        .record-type {
+          color: #6366f1;
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .record-date {
+          color: #64748b;
+          font-size: 12px;
+        }
+      }
+
+      .record-content {
+        color: #334155;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .record-status {
+        .status-text {
+          font-size: 12px;
+          padding: 4px 8px;
+          border-radius: 4px;
+          
+          &.completed {
+            background: #dcfce7;
+            color: #16a34a;
+          }
+          
+          &.pending {
+            background: #fef3c7;
+            color: #d97706;
+          }
+          
+          &.failed {
+            background: #fee2e2;
+            color: #dc2626;
+          }
+        }
+      }
+    }
+
+    .ai-more {
+      text-align: center;
+      padding: 16px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.8;
+
+      &:active {
+        opacity: 1;
+      }
+    }
+  }
+
+  .ai-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: white;
+
+    .empty-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .empty-tip {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .empty-button {
+      background: white;
+      color: #6366f1;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+}
+
+// 新建解读样式
+.ai-new {
+  .ai-features {
+    margin-bottom: 30px;
+
+    .feature-item {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      .feature-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        margin-right: 16px;
+        flex-shrink: 0;
+
+        &.tarot {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        &.astrology {
+          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        &.fortune {
+          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+      }
+
+      .feature-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 4px;
+        display: block;
+      }
+
+      .feature-desc {
+        font-size: 13px;
+        color: #64748b;
+        display: block;
+      }
+    }
+  }
+
+  .ai-tips {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+
+    .tips-title {
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .tips-list {
+      .tip-item {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 8px;
+        display: block;
+      }
+    }
+  }
+}

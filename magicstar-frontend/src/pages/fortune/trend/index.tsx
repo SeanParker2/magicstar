@@ -2,34 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Canvas } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { AtCard, AtButton, AtIcon, AtSegmentedControl, AtCalendar } from 'taro-ui';
+import { FortuneService, FortuneTrendData, FortuneTrendStats } from '../../../services/fortune';
 import './index.scss';
 
-interface TrendData {
-  date: string;
-  overallScore: number;
-  loveScore: number;
-  careerScore: number;
-  wealthScore: number;
-  healthScore: number;
-}
-
-interface TrendStats {
-  period: string;
-  averageScore: number;
-  highestScore: number;
-  lowestScore: number;
-  trend: 'up' | 'down' | 'stable';
-  data: TrendData[];
-}
+// 使用服务层定义的接口
+// type TrendData = FortuneTrendData;
+// type TrendStats = FortuneTrendStats;
 
 const FortuneTrend: React.FC = () => {
-  const [trendData, setTrendData] = useState<TrendStats | null>(null);
+  const [trendData, setTrendData] = useState<FortuneTrendStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [periodIndex, setPeriodIndex] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [chartType, setChartType] = useState<'line' | 'bar'>('line');
-  
+
   const periods = ['最近7天', '最近30天', '最近90天'];
   const periodValues = [7, 30, 90];
 
@@ -40,70 +27,67 @@ const FortuneTrend: React.FC = () => {
   const loadTrendData = async () => {
     try {
       setLoading(true);
-      
-      const response = await Taro.request({
-        url: `${process.env.TARO_APP_API_URL}/fortune/trend`,
-        method: 'GET',
-        data: {
-          days: periodValues[periodIndex]
-        },
-        header: {
-          'Authorization': `Bearer ${Taro.getStorageSync('token')}`
-        }
-      });
-      
-      if (response.data.success) {
-        setTrendData(response.data.data);
-        drawChart(response.data.data.data);
+
+      const response = await FortuneService.getFortuneTrend(periodValues[periodIndex]);
+
+      if (response.success) {
+        setTrendData(response.data);
+        drawChart(response.data.data);
       }
     } catch (error) {
       console.error('获取趋势数据失败:', error);
       Taro.showToast({
         title: '获取趋势数据失败',
-        icon: 'error'
+        icon: 'error',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const drawChart = (data: TrendData[]) => {
+  const drawChart = (data: FortuneTrendData[]) => {
     const query = Taro.createSelectorQuery();
-    query.select('#trend-canvas')
+    query
+      .select('#trend-canvas')
       .fields({ node: true, size: true })
-      .exec((res) => {
+      .exec(res => {
         if (res[0]) {
           const canvas = res[0].node;
           const ctx = canvas.getContext('2d');
-          
+
           const dpr = Taro.getSystemInfoSync().pixelRatio;
           canvas.width = res[0].width * dpr;
           canvas.height = res[0].height * dpr;
           ctx.scale(dpr, dpr);
-          
+
           drawTrendChart(ctx, data, res[0].width, res[0].height);
         }
       });
   };
 
-  const drawTrendChart = (ctx: CanvasRenderingContext2D, data: TrendData[], width: number, height: number) => {
+  const drawTrendChart = (
+    ctx: CanvasRenderingContext2D,
+    data: FortuneTrendData[],
+    width: number,
+    height: number
+  ) => {
     // 清空画布
     ctx.clearRect(0, 0, width, height);
-    
+
     if (data.length === 0) return;
-    
+
     const padding = 40;
     const chartWidth = width - padding * 2;
     const chartHeight = height - padding * 2;
-    
+
     // 绘制背景
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     ctx.fillRect(0, 0, width, height);
-    
+
     // 绘制网格线
     ctx.strokeStyle = '#f0f0f0';
     ctx.lineWidth = 1;
-    
+
     // 水平网格线
     for (let i = 0; i <= 5; i++) {
       const y = padding + (chartHeight / 5) * i;
@@ -111,14 +95,14 @@ const FortuneTrend: React.FC = () => {
       ctx.moveTo(padding, y);
       ctx.lineTo(width - padding, y);
       ctx.stroke();
-      
+
       // Y轴标签
       ctx.fillStyle = '#666';
       ctx.font = '12px Arial';
       ctx.textAlign = 'right';
       ctx.fillText(`${100 - i * 20}`, padding - 10, y + 4);
     }
-    
+
     // 垂直网格线
     const stepX = chartWidth / (data.length - 1);
     for (let i = 0; i < data.length; i++) {
@@ -127,7 +111,7 @@ const FortuneTrend: React.FC = () => {
       ctx.moveTo(x, padding);
       ctx.lineTo(x, height - padding);
       ctx.stroke();
-      
+
       // X轴标签
       if (i % Math.ceil(data.length / 5) === 0) {
         ctx.fillStyle = '#666';
@@ -138,28 +122,29 @@ const FortuneTrend: React.FC = () => {
         ctx.fillText(label, x, height - padding + 20);
       }
     }
-    
+
     // 绘制数据线
     const colors = {
       overall: '#6190E8',
       love: '#f5222d',
       career: '#52c41a',
       wealth: '#faad14',
-      health: '#722ed1'
+      health: '#722ed1',
     };
-    
-    const metrics = ['overallScore', 'loveScore', 'careerScore', 'wealthScore', 'healthScore'];
+
+    const metrics = ['overall', 'love', 'career', 'wealth', 'health'] as const;
     const labels = ['综合', '爱情', '事业', '财富', '健康'];
-    
+
     metrics.forEach((metric, index) => {
       ctx.strokeStyle = Object.values(colors)[index];
       ctx.lineWidth = chartType === 'line' ? 3 : 1;
       ctx.beginPath();
-      
+
       data.forEach((point, i) => {
         const x = padding + stepX * i;
-        const y = padding + chartHeight - (point[metric] / 100) * chartHeight;
-        
+        const scoreValue = point.scores[metric] * 20; // 转换为百分制
+        const y = padding + chartHeight - (scoreValue / 100) * chartHeight;
+
         if (chartType === 'line') {
           if (i === 0) {
             ctx.moveTo(x, y);
@@ -170,21 +155,22 @@ const FortuneTrend: React.FC = () => {
           // 绘制柱状图
           const barWidth = stepX / 6;
           const barX = x - barWidth * 2.5 + barWidth * index;
-          const barHeight = (point[metric] / 100) * chartHeight;
-          
+          const barHeight = (scoreValue / 100) * chartHeight;
+
           ctx.fillStyle = Object.values(colors)[index];
           ctx.fillRect(barX, height - padding - barHeight, barWidth, barHeight);
         }
       });
-      
+
       if (chartType === 'line') {
         ctx.stroke();
-        
+
         // 绘制数据点
         data.forEach((point, i) => {
           const x = padding + stepX * i;
-          const y = padding + chartHeight - (point[metric] / 100) * chartHeight;
-          
+          const scoreValue = point.scores[metric] * 20; // 转换为百分制
+          const y = padding + chartHeight - (scoreValue / 100) * chartHeight;
+
           ctx.fillStyle = Object.values(colors)[index];
           ctx.beginPath();
           ctx.arc(x, y, 4, 0, 2 * Math.PI);
@@ -192,20 +178,20 @@ const FortuneTrend: React.FC = () => {
         });
       }
     });
-    
+
     // 绘制图例
     const legendY = height - 15;
     let legendX = padding;
-    
+
     labels.forEach((label, index) => {
       ctx.fillStyle = Object.values(colors)[index];
       ctx.fillRect(legendX, legendY - 8, 12, 12);
-      
+
       ctx.fillStyle = '#333';
       ctx.font = '12px Arial';
       ctx.textAlign = 'left';
       ctx.fillText(label, legendX + 16, legendY);
-      
+
       legendX += ctx.measureText(label).width + 30;
     });
   };
@@ -215,7 +201,7 @@ const FortuneTrend: React.FC = () => {
   };
 
   const handleChartTypeChange = () => {
-    setChartType(prev => prev === 'line' ? 'bar' : 'line');
+    setChartType(prev => (prev === 'line' ? 'bar' : 'line'));
     if (trendData) {
       setTimeout(() => drawChart(trendData.data), 100);
     }
@@ -245,129 +231,107 @@ const FortuneTrend: React.FC = () => {
 
   if (loading) {
     return (
-      <View className='trend-loading'>
-        <AtIcon value='loading-3' size='30' color='#6190E8'></AtIcon>
-        <Text className='loading-text'>正在分析运势趋势...</Text>
+      <View className="trend-loading">
+        <AtIcon value="loading-3" size="30" color="#6190E8"></AtIcon>
+        <Text className="loading-text">正在分析运势趋势...</Text>
       </View>
     );
   }
 
   return (
-    <View className='fortune-trend-container'>
+    <View className="fortune-trend-container">
       {/* 时间段选择 */}
-      <View className='period-selector'>
-        <AtSegmentedControl
-          values={periods}
-          onClick={handlePeriodChange}
-          current={periodIndex}
-        />
+      <View className="period-selector">
+        <AtSegmentedControl values={periods} onClick={handlePeriodChange} current={periodIndex} />
       </View>
 
       {trendData ? (
-        <View className='trend-content'>
+        <View className="trend-content">
           {/* 统计概览 */}
-          <AtCard className='stats-card'>
-            <View className='stats-header'>
-              <Text className='stats-title'>运势统计</Text>
-              <View className='trend-indicator'>
-                <AtIcon 
-                  value={getTrendIcon(trendData.trend).icon} 
-                  size='20' 
+          <AtCard className="stats-card">
+            <View className="stats-header">
+              <Text className="stats-title">运势统计</Text>
+              <View className="trend-indicator">
+                <AtIcon
+                  value={getTrendIcon(trendData.trend).icon}
+                  size="20"
                   color={getTrendIcon(trendData.trend).color}
                 ></AtIcon>
-                <Text 
-                  className='trend-text'
-                  style={{ color: getTrendIcon(trendData.trend).color }}
-                >
+                <Text className="trend-text" style={{ color: getTrendIcon(trendData.trend).color }}>
                   {getTrendText(trendData.trend)}
                 </Text>
               </View>
             </View>
-            
-            <View className='stats-grid'>
-              <View className='stat-item'>
-                <Text className='stat-label'>平均分</Text>
-                <Text className='stat-value'>{trendData.averageScore.toFixed(1)}</Text>
+
+            <View className="stats-grid">
+              <View className="stat-item">
+                <Text className="stat-label">平均分</Text>
+                <Text className="stat-value">{trendData.averageScore.toFixed(1)}</Text>
               </View>
-              <View className='stat-item'>
-                <Text className='stat-label'>最高分</Text>
-                <Text className='stat-value high'>{trendData.highestScore}</Text>
+              <View className="stat-item">
+                <Text className="stat-label">最高分</Text>
+                <Text className="stat-value high">{trendData.highestScore}</Text>
               </View>
-              <View className='stat-item'>
-                <Text className='stat-label'>最低分</Text>
-                <Text className='stat-value low'>{trendData.lowestScore}</Text>
+              <View className="stat-item">
+                <Text className="stat-label">最低分</Text>
+                <Text className="stat-value low">{trendData.lowestScore}</Text>
               </View>
             </View>
           </AtCard>
-          
+
           {/* 趋势图表 */}
-          <AtCard className='chart-card'>
-            <View className='chart-header'>
-              <Text className='chart-title'>运势趋势图</Text>
-              <AtButton 
-                type='secondary'
-                size='small'
-                onClick={handleChartTypeChange}
-              >
-                <AtIcon 
-                  value={chartType === 'line' ? 'analytics' : 'menu'} 
-                  size='14'
-                ></AtIcon>
+          <AtCard className="chart-card">
+            <View className="chart-header">
+              <Text className="chart-title">运势趋势图</Text>
+              <AtButton type="secondary" size="small" onClick={handleChartTypeChange}>
+                <AtIcon value={chartType === 'line' ? 'analytics' : 'menu'} size="14"></AtIcon>
                 {chartType === 'line' ? '柱状图' : '折线图'}
               </AtButton>
             </View>
-            
-            <View className='chart-container'>
-              <Canvas 
-                id='trend-canvas'
-                canvasId='trend-canvas'
-                className='trend-canvas'
-                type='2d'
+
+            <View className="chart-container">
+              <Canvas
+                id="trend-canvas"
+                canvasId="trend-canvas"
+                className="trend-canvas"
+                type="2d"
               />
             </View>
           </AtCard>
-          
+
           {/* 操作按钮 */}
-          <View className='action-buttons'>
-            <AtButton 
-              type='primary'
-              size='normal'
-              onClick={() => setShowCalendar(true)}
-            >
-              <AtIcon value='calendar' size='16'></AtIcon>
+          <View className="action-buttons">
+            <AtButton type="primary" size="normal" onClick={() => setShowCalendar(true)}>
+              <AtIcon value="calendar" size="16"></AtIcon>
               选择日期
             </AtButton>
-            
-            <AtButton 
-              type='secondary'
-              size='normal'
-              onClick={loadTrendData}
-            >
-              <AtIcon value='reload' size='16'></AtIcon>
+
+            <AtButton type="secondary" size="normal" onClick={loadTrendData}>
+              <AtIcon value="reload" size="16"></AtIcon>
               刷新数据
             </AtButton>
           </View>
         </View>
       ) : (
-        <View className='trend-empty'>
-          <AtIcon value='analytics' size='60' color='#ccc'></AtIcon>
-          <Text className='empty-text'>暂无趋势数据</Text>
-          <Text className='empty-tip'>需要更多运势记录才能分析趋势</Text>
+        <View className="trend-empty">
+          <AtIcon value="analytics" size="60" color="#ccc"></AtIcon>
+          <Text className="empty-text">暂无趋势数据</Text>
+          <Text className="empty-tip">需要更多运势记录才能分析趋势</Text>
         </View>
       )}
-      
+
       {/* 日期选择器 */}
       {showCalendar && (
         <AtCalendar
           isSwiper={false}
           marks={[]}
           selectedDates={selectedDate ? [{ value: selectedDate }] : []}
-          onDayClick={(item) => {
+          onDayClick={item => {
             setSelectedDate(item.value);
             setShowCalendar(false);
             // 可以根据选择的日期加载特定数据
           }}
-          onSelectDate={(e) => {
+          onSelectDate={e => {
             setSelectedDate(e.value);
             setShowCalendar(false);
           }}

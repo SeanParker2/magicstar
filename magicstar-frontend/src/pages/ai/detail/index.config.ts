@@ -5,5 +5,5 @@ export default definePageConfig({
   backgroundColor: '#f5f5f5',
   enablePullDownRefresh: false,
   enableShareAppMessage: true,
-  enableShareTimeline: true
-})
+  enableShareTimeline: true,
+});

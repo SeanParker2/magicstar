@@ -31,6 +31,7 @@ import { User, UserStatus, LoginType } from '../user/entities/user.entity';
 import { JwtPayload } from './strategies/jwt.strategy';
 import { SmsService } from '../../common/services/sms.service';
 import { EmailService } from '../../common/services/email.service';
+import { Cache, CacheEvict } from '../../common/decorators/cache.decorator';
 
 @Injectable()
 export class AuthService {
@@ -220,19 +221,24 @@ export class AuthService {
     return this.generateTokenResponse(user);
   }
 
+  @Cache({ key: 'user_lookup', ttl: 300, tags: ['user'] })
+  async findUserByIdentifier(identifier: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: [
+        { username: identifier },
+        { email: identifier },
+        { phone: identifier },
+      ],
+      relations: ['roles'],
+    });
+  }
+
   async validateUser(
     usernameOrEmailOrPhone: string,
     password: string,
   ): Promise<User> {
     // 查找用户（支持用户名、邮箱、手机号）
-    const user = await this.userRepository.findOne({
-      where: [
-        { username: usernameOrEmailOrPhone },
-        { email: usernameOrEmailOrPhone },
-        { phone: usernameOrEmailOrPhone },
-      ],
-      relations: ['roles'],
-    });
+    const user = await this.findUserByIdentifier(usernameOrEmailOrPhone);
 
     if (!user) {
       // 增加登录失败次数

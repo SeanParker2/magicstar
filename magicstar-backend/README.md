@@ -1,98 +1,340 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# MagicStar Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+基于 NestJS 构建的星座占卜应用后端服务，提供用户管理、占卜服务、商城功能和AI集成等核心功能。
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 项目概述
 
-## Description
+MagicStar Backend 是一个现代化的微服务架构应用，采用 TypeScript + NestJS 开发，集成了多种第三方服务和AI能力。
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 核心功能
 
-## Project setup
+- **用户系统**：注册、登录、个人资料管理
+- **占卜服务**：塔罗牌占卜、星座运势、个性化解读
+- **商城系统**：商品管理、订单处理、支付集成
+- **AI集成**：百度文心一言API、智能解读生成
+- **内容管理**：占卜内容、推荐算法
+- **监控系统**：Prometheus指标、健康检查
 
-```bash
-$ npm install
-```
+### 技术栈
 
-## Compile and run the project
+- **框架**：NestJS 10.x + TypeScript
+- **数据库**：MySQL 8.0 + TypeORM
+- **缓存**：Redis 7.x
+- **认证**：JWT + Passport
+- **文档**：Swagger/OpenAPI
+- **监控**：Prometheus + Grafana
+- **测试**：Jest + Supertest
+- **容器化**：Docker + Docker Compose
 
-```bash
-# development
-$ npm run start
+## 快速开始
 
-# watch mode
-$ npm run start:dev
+### 环境要求
 
-# production mode
-$ npm run start:prod
-```
+- Node.js >= 18.0.0
+- MySQL >= 8.0
+- Redis >= 7.0
+- Docker & Docker Compose (可选)
 
-## Run tests
+### 安装依赖
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+### 环境配置
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+1. 复制环境配置文件：
+```bash
+cp .env.example .env
+cp .env.ai.example .env.ai
+```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. 配置数据库连接：
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=your_password
+DB_DATABASE=magicstar
+```
+
+3. 配置Redis：
+```env
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+```
+
+4. 配置AI服务（.env.ai）：
+```env
+BAIDU_API_KEY=your_baidu_api_key
+BAIDU_SECRET_KEY=your_baidu_secret_key
+```
+
+### 数据库初始化
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# 运行数据库迁移
+npm run migration:run
+
+# 填充种子数据
+npm run seed:run
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 启动服务
 
-## Resources
+```bash
+# 开发模式
+npm run start:dev
 
-Check out a few resources that may come in handy when working with NestJS:
+# 生产模式
+npm run start:prod
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# 调试模式
+npm run start:debug
+```
 
-## Support
+### 使用Docker
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# 启动所有服务
+docker-compose up -d
 
-## Stay in touch
+# 仅启动依赖服务（MySQL + Redis）
+docker-compose up -d mysql redis
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## API文档
 
-## License
+启动服务后，访问以下地址查看API文档：
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- **Swagger UI**: http://localhost:3000/api
+- **健康检查**: http://localhost:3000/health
+- **监控指标**: http://localhost:3000/metrics
+
+### 主要API端点
+
+#### 用户认证
+- `POST /auth/register` - 用户注册
+- `POST /auth/login` - 用户登录
+- `POST /auth/refresh` - 刷新Token
+- `POST /auth/logout` - 用户登出
+
+#### 用户管理
+- `GET /users/profile` - 获取用户信息
+- `PUT /users/profile` - 更新用户信息
+- `POST /users/avatar` - 上传头像
+
+#### 占卜服务
+- `POST /tarot/draw` - 抽取塔罗牌
+- `POST /tarot/interpret` - 获取解读
+- `GET /tarot/history` - 占卜历史
+- `GET /fortune/daily` - 每日运势
+
+#### 商城功能
+- `GET /products` - 商品列表
+- `GET /products/:id` - 商品详情
+- `POST /orders` - 创建订单
+- `POST /payments/create` - 创建支付
+
+#### AI服务
+- `POST /ai/interpret` - AI解读
+- `POST /ai/chat` - AI对话
+- `GET /ai/templates` - 提示词模板
+
+## 测试
+
+```bash
+# 单元测试
+npm run test
+
+# 集成测试
+npm run test:e2e
+
+# 测试覆盖率
+npm run test:cov
+
+# 监听模式
+npm run test:watch
+```
+
+## 部署
+
+### 生产环境部署
+
+1. **构建应用**：
+```bash
+npm run build
+```
+
+2. **使用PM2部署**：
+```bash
+npm install -g pm2
+pm2 start dist/main.js --name magicstar-backend
+```
+
+3. **使用Docker部署**：
+```bash
+# 构建镜像
+docker build -t magicstar-backend .
+
+# 运行容器
+docker run -d -p 3000:3000 --name magicstar-backend magicstar-backend
+```
+
+4. **使用Docker Compose**：
+```bash
+docker-compose -f docker-compose.yml up -d
+```
+
+### 环境变量配置
+
+生产环境需要配置以下关键环境变量：
+
+```env
+# 应用配置
+NODE_ENV=production
+PORT=3000
+JWT_SECRET=your_jwt_secret
+
+# 数据库配置
+DB_HOST=your_db_host
+DB_PORT=3306
+DB_USERNAME=your_db_user
+DB_PASSWORD=your_db_password
+DB_DATABASE=magicstar
+
+# Redis配置
+REDIS_HOST=your_redis_host
+REDIS_PORT=6379
+REDIS_PASSWORD=your_redis_password
+
+# AI服务配置
+BAIDU_API_KEY=your_baidu_api_key
+BAIDU_SECRET_KEY=your_baidu_secret_key
+```
+
+## 监控与日志
+
+### Prometheus指标
+
+应用集成了Prometheus指标收集，包括：
+
+- HTTP请求指标
+- 数据库连接池状态
+- Redis连接状态
+- 自定义业务指标
+
+访问 `http://localhost:3000/metrics` 查看指标。
+
+### 健康检查
+
+```bash
+# 检查应用健康状态
+curl http://localhost:3000/health
+
+# 检查数据库连接
+curl http://localhost:3000/health/db
+
+# 检查Redis连接
+curl http://localhost:3000/health/redis
+```
+
+### 日志管理
+
+应用使用结构化日志，支持不同级别：
+
+- `error`: 错误日志
+- `warn`: 警告日志
+- `info`: 信息日志
+- `debug`: 调试日志
+
+## 开发指南
+
+### 代码规范
+
+项目使用ESLint和Prettier进行代码格式化：
+
+```bash
+# 检查代码规范
+npm run lint
+
+# 自动修复
+npm run lint:fix
+
+# 格式化代码
+npm run format
+```
+
+### 数据库迁移
+
+```bash
+# 生成新的迁移文件
+npm run migration:generate -- -n MigrationName
+
+# 运行迁移
+npm run migration:run
+
+# 回滚迁移
+npm run migration:revert
+```
+
+### 添加新模块
+
+```bash
+# 生成新模块
+nest g module module-name
+
+# 生成控制器
+nest g controller module-name
+
+# 生成服务
+nest g service module-name
+```
+
+## 故障排除
+
+### 常见问题
+
+1. **数据库连接失败**
+   - 检查数据库服务是否启动
+   - 验证连接配置是否正确
+   - 确认网络连接是否正常
+
+2. **Redis连接失败**
+   - 检查Redis服务状态
+   - 验证Redis配置
+   - 检查防火墙设置
+
+3. **AI服务调用失败**
+   - 验证API密钥是否正确
+   - 检查网络连接
+   - 查看API配额是否用完
+
+### 调试技巧
+
+```bash
+# 启用调试模式
+DEBUG=* npm run start:dev
+
+# 查看详细日志
+LOG_LEVEL=debug npm run start:dev
+```
+
+## 贡献指南
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+## 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 联系方式
+
+- 项目维护者：MagicStar Team
+- 邮箱：support@magicstar.com
+- 项目地址：https://github.com/magicstar/magicstar-backend

@@ -1,0 +1,698 @@
+.product-search {
+  width: 100%;
+  background: #fff;
+  position: relative;
+
+  .search-bar-container {
+    padding: 12px 16px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    .at-search-bar {
+      .at-search-bar__input-cnt {
+        background: #f8f9fa;
+        border-radius: 20px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+
+        &:focus-within {
+          border-color: #667eea;
+          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .at-search-bar__placeholder {
+          color: #999;
+          font-size: 14px;
+        }
+
+        .at-search-bar__input {
+          font-size: 14px;
+          color: #333;
+        }
+      }
+
+      .at-search-bar__action {
+        .at-button {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border: none;
+          border-radius: 16px;
+          font-size: 14px;
+          font-weight: 600;
+          padding: 0 16px;
+          height: 32px;
+          line-height: 32px;
+        }
+      }
+    }
+  }
+
+  .search-content {
+    flex: 1;
+    overflow: hidden;
+  }
+}
+
+// 搜索建议
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  max-height: 300px;
+  overflow-y: auto;
+
+  .suggestion-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: #f8f9fa;
+    }
+
+    .suggestion-content {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      gap: 8px;
+
+      .suggestion-text {
+        font-size: 14px;
+        color: #333;
+        flex: 1;
+      }
+
+      .suggestion-count {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+
+    .suggestion-arrow {
+      transform: rotate(-45deg);
+      opacity: 0.5;
+    }
+  }
+}
+
+// 搜索历史
+.search-history {
+  padding: 16px;
+
+  .history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    .history-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .history-clear {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background: #f8f9fa;
+      }
+
+      .clear-text {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+  }
+
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #e9ecef;
+      }
+
+      .history-keyword {
+        font-size: 14px;
+        color: #666;
+        flex: 1;
+      }
+
+      .history-delete {
+        padding: 4px;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background: #dee2e6;
+        }
+      }
+    }
+  }
+}
+
+// 热门搜索
+.hot-search {
+  padding: 16px;
+  border-top: 1px solid #f0f0f0;
+
+  .hot-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    .hot-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .hot-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .hot-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #667eea;
+        background: #f8f9ff;
+      }
+
+      .hot-keyword {
+        font-size: 14px;
+        color: #333;
+        flex: 1;
+      }
+
+      .at-tag {
+        margin-left: 4px;
+      }
+    }
+  }
+}
+
+// 搜索结果
+.search-results {
+  height: calc(100vh - 120px);
+  padding: 8px 0;
+
+  .result-item {
+    display: flex;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: #f8f9fa;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .result-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-right: 12px;
+      flex-shrink: 0;
+
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .result-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .result-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+      }
+
+      .result-description {
+        font-size: 12px;
+        color: #666;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+      }
+
+      .result-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 4px;
+
+        .result-price {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .current-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff6b6b;
+          }
+
+          .original-price {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+          }
+        }
+
+        .result-stats {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .sales {
+            font-size: 12px;
+            color: #999;
+          }
+
+          .rating {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+
+            .rating-text {
+              font-size: 12px;
+              color: #ffa500;
+            }
+          }
+        }
+      }
+
+      .result-tags {
+        display: flex;
+        gap: 4px;
+        margin-top: 4px;
+
+        .at-tag {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
+// 加载状态
+.search-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+
+  .loading-text {
+    font-size: 14px;
+    color: #999;
+  }
+}
+
+// 错误状态
+.search-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+
+  .error-text {
+    font-size: 14px;
+    color: #f44336;
+    text-align: center;
+  }
+}
+
+// 空状态
+.search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 12px;
+
+  .empty-text {
+    font-size: 16px;
+    color: #666;
+    font-weight: 600;
+  }
+
+  .empty-tip {
+    font-size: 14px;
+    color: #999;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .product-search {
+    .search-bar-container {
+      padding: 8px 12px;
+
+      .at-search-bar {
+        .at-search-bar__input-cnt {
+          border-radius: 16px;
+
+          .at-search-bar__placeholder,
+          .at-search-bar__input {
+            font-size: 13px;
+          }
+        }
+
+        .at-search-bar__action {
+          .at-button {
+            font-size: 13px;
+            padding: 0 12px;
+            height: 28px;
+            line-height: 28px;
+          }
+        }
+      }
+    }
+  }
+
+  .search-suggestions {
+    .suggestion-item {
+      padding: 10px 12px;
+
+      .suggestion-content {
+        gap: 6px;
+
+        .suggestion-text {
+          font-size: 13px;
+        }
+
+        .suggestion-count {
+          font-size: 11px;
+        }
+      }
+    }
+  }
+
+  .search-history {
+    padding: 12px;
+
+    .history-header {
+      margin-bottom: 8px;
+
+      .history-title {
+        font-size: 14px;
+      }
+
+      .history-clear {
+        .clear-text {
+          font-size: 11px;
+        }
+      }
+    }
+
+    .history-list {
+      gap: 6px;
+
+      .history-item {
+        padding: 6px 8px;
+
+        .history-keyword {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .hot-search {
+    padding: 12px;
+
+    .hot-header {
+      margin-bottom: 8px;
+
+      .hot-title {
+        font-size: 14px;
+      }
+    }
+
+    .hot-list {
+      gap: 6px;
+
+      .hot-item {
+        padding: 6px 8px;
+
+        .hot-keyword {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .search-results {
+    height: calc(100vh - 100px);
+
+    .result-item {
+      padding: 10px 12px;
+
+      .result-image {
+        width: 60px;
+        height: 60px;
+        margin-right: 8px;
+      }
+
+      .result-info {
+        gap: 3px;
+
+        .result-name {
+          font-size: 14px;
+        }
+
+        .result-description {
+          font-size: 11px;
+        }
+
+        .result-meta {
+          margin-top: 3px;
+
+          .result-price {
+            gap: 6px;
+
+            .current-price {
+              font-size: 16px;
+            }
+
+            .original-price {
+              font-size: 11px;
+            }
+          }
+
+          .result-stats {
+            gap: 6px;
+
+            .sales {
+              font-size: 11px;
+            }
+
+            .rating {
+              .rating-text {
+                font-size: 11px;
+              }
+            }
+          }
+        }
+
+        .result-tags {
+          gap: 3px;
+          margin-top: 3px;
+
+          .at-tag {
+            font-size: 9px;
+          }
+        }
+      }
+    }
+  }
+
+  .search-loading,
+  .search-error,
+  .search-empty {
+    padding: 40px 20px;
+    gap: 12px;
+
+    .loading-text,
+    .error-text {
+      font-size: 13px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+    }
+
+    .empty-tip {
+      font-size: 13px;
+    }
+  }
+}
+
+// 动画效果
+.search-suggestions {
+  animation: slideDown 0.3s ease-out;
+}
+
+.suggestion-item,
+.history-item,
+.hot-item,
+.result-item {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.history-list {
+  .history-item {
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+    &:nth-child(4) { animation-delay: 0.4s; }
+    &:nth-child(5) { animation-delay: 0.5s; }
+  }
+}
+
+.hot-list {
+  .hot-item {
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+    &:nth-child(4) { animation-delay: 0.4s; }
+    &:nth-child(5) { animation-delay: 0.5s; }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Taro UI 组件样式覆盖
+.product-search {
+  .at-search-bar {
+    .at-search-bar__input-cnt {
+      .at-icon {
+        color: #999;
+      }
+    }
+  }
+
+  .at-tag {
+    &.at-tag--small {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    &.at-tag--primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: transparent;
+    }
+
+    &.at-tag--success {
+      background: #4caf50;
+      border-color: transparent;
+    }
+
+    &.at-tag--default {
+      background: #f8f9fa;
+      color: #666;
+      border-color: #e9ecef;
+    }
+  }
+
+  .at-activity-indicator {
+    .at-activity-indicator__content {
+      color: #667eea;
+    }
+  }
+
+  .at-icon {
+    transition: all 0.3s ease;
+  }
+}

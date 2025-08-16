@@ -8,6 +8,7 @@ import { AiResponse, AiResponseQuality } from '../entities/ai-response.entity';
 import { PromptTemplate } from '../entities/prompt-template.entity';
 
 import { OpenaiService } from './openai.service';
+import { BaiduService } from './baidu.service';
 import { PromptService } from './prompt.service';
 import { AiCacheService } from './ai-cache.service';
 import { AiQueueService } from './ai-queue.service';
@@ -51,6 +52,7 @@ export class AiService {
     private readonly promptTemplateRepository: Repository<PromptTemplate>,
     private readonly configService: ConfigService,
     private readonly openaiService: OpenaiService,
+    private readonly baiduService: BaiduService,
     private readonly promptService: PromptService,
     private readonly aiCacheService: AiCacheService,
     private readonly aiQueueService: AiQueueService,
@@ -393,6 +395,7 @@ export class AiService {
       cache: string;
       queue: string;
       openai: string;
+      baidu: string;
     };
   }> {
     try {
@@ -402,6 +405,7 @@ export class AiService {
         cache: 'unknown',
         queue: 'unknown',
         openai: 'unknown',
+        baidu: 'unknown',
       };
 
       // 检查数据库连接
@@ -437,6 +441,14 @@ export class AiService {
         services.openai = 'unhealthy';
       }
 
+      // 检查百度服务连接
+      try {
+        await this.baiduService.checkConnection();
+        services.baidu = 'healthy';
+      } catch (error) {
+        services.baidu = 'unhealthy';
+      }
+
       const allHealthy = Object.values(services).every(status => status === 'healthy');
       
       return {
@@ -454,6 +466,7 @@ export class AiService {
           cache: 'unknown',
           queue: 'unknown',
           openai: 'unknown',
+          baidu: 'unknown',
         },
       };
     }
@@ -530,8 +543,49 @@ export class AiService {
    * 私有方法：调用AI服务
    */
   private async callAiService(prompt: string, modelConfig: any): Promise<any> {
-    // 目前只支持OpenAI，后续可扩展其他服务
-    return await this.openaiService.generateCompletion(prompt, modelConfig);
+    const provider = modelConfig?.provider || this.getDefaultProvider();
+    
+    try {
+      switch (provider) {
+        case 'baidu':
+          this.logger.log('Using Baidu AI service');
+          return await this.baiduService.generateCompletion(prompt, modelConfig);
+        case 'openai':
+        default:
+          this.logger.log('Using OpenAI service');
+          return await this.openaiService.generateCompletion(prompt, modelConfig);
+      }
+    } catch (error) {
+      this.logger.error(`AI service call failed with provider ${provider}: ${error.message}`);
+      
+      // 降级机制：如果主要服务失败，尝试备用服务
+      if (provider === 'baidu') {
+        this.logger.log('Falling back to OpenAI service');
+        try {
+          return await this.openaiService.generateCompletion(prompt, modelConfig);
+        } catch (fallbackError) {
+          this.logger.error(`Fallback service also failed: ${fallbackError.message}`);
+          throw error; // 抛出原始错误
+        }
+      } else if (provider === 'openai') {
+        this.logger.log('Falling back to Baidu service');
+        try {
+          return await this.baiduService.generateCompletion(prompt, modelConfig);
+        } catch (fallbackError) {
+          this.logger.error(`Fallback service also failed: ${fallbackError.message}`);
+          throw error; // 抛出原始错误
+        }
+      }
+      
+      throw error;
+    }
+  }
+
+  /**
+   * 获取默认AI服务提供商
+   */
+  private getDefaultProvider(): string {
+    return this.configService.get<string>('ai.defaultProvider', 'baidu');
   }
 
   /**

@@ -1,7 +1,9 @@
 import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Payment, PaymentStatus, PaymentMethod, PaymentType } from '../entities/payment.entity';
-import { PaymentRecord, PaymentRecordStatus } from '../entities/payment-record.entity';
+import { PaymentRecord, PaymentRecordStatus, PaymentRecordType } from '../entities/payment-record.entity';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { PaymentQueryDto } from '../dto/payment-query.dto';
 import { PaymentCallbackDto } from '../dto/payment-query.dto';
@@ -10,21 +12,25 @@ import { WechatPaymentService } from './wechat-payment.service';
 import { AlipayService } from './alipay.service';
 import { PaymentSecurityService } from './payment-security.service';
 import { PaymentLoggerService } from './payment-logger.service';
+import { PrometheusService } from '../../monitoring/services/prometheus.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PaymentService {
   private readonly logger = new Logger(PaymentService.name);
-  // 临时内存存储，用于开发测试
-  private payments: Payment[] = [];
-  private paymentRecords: PaymentRecord[] = [];
 
   constructor(
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>,
+    @InjectRepository(PaymentRecord)
+    private readonly paymentRecordRepository: Repository<PaymentRecord>,
+    private readonly dataSource: DataSource,
     private readonly wechatPaymentService: WechatPaymentService,
     private readonly alipayService: AlipayService,
     private readonly configService: ConfigService,
     private readonly paymentSecurityService: PaymentSecurityService,
     private readonly paymentLoggerService: PaymentLoggerService,
+    private readonly prometheusService: PrometheusService,
   ) {}
 
   /**
@@ -44,33 +50,24 @@ export class PaymentService {
       }
 
       // 创建支付记录
-      const payment = {
-        id: uuidv4(),
-        paymentNo,
-        userId,
-        orderId: paymentData.orderId,
-        amount: paymentData.amount,
-        currency: paymentData.currency || 'CNY',
-        paymentMethod: paymentData.paymentMethod,
-        paymentType: paymentData.paymentType || PaymentType.ORDER,
-        status: PaymentStatus.PENDING,
-        description: paymentData.description || '',
-        transactionId: null,
-        outTradeNo: null,
-        fee: 0,
-        actualAmount: paymentData.amount,
-        paidAt: null,
-        expiredAt: new Date(Date.now() + 30 * 60 * 1000),
-        failureReason: null,
-        refundedAmount: 0,
-        refundReason: null,
-        refundedAt: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as unknown as Payment;
+      const payment = new Payment();
+      payment.paymentNo = paymentNo;
+      payment.userId = userId;
+      payment.orderId = paymentData.orderId;
+      payment.amount = paymentData.amount;
+      payment.currency = paymentData.currency || 'CNY';
+      payment.paymentMethod = paymentData.paymentMethod;
+      payment.paymentType = paymentData.paymentType || PaymentType.ORDER;
+      payment.status = PaymentStatus.PENDING;
+      payment.description = paymentData.description || '';
+      // 可选字段不需要显式设置，TypeORM会处理
+      payment.fee = 0;
+      payment.actualAmount = paymentData.amount;
+      payment.expiredAt = new Date(Date.now() + 30 * 60 * 1000);
+      payment.refundedAmount = 0;
 
-      // 保存到内存
-      this.payments.push(payment);
+      // 保存到数据库
+      const savedPayment = await this.paymentRepository.save(payment);
 
       // 记录支付创建日志
       await this.paymentLoggerService.logPaymentCreation({
@@ -79,7 +76,7 @@ export class PaymentService {
         amount: paymentData.amount,
         userId,
         orderId: paymentData.orderId,
-        additionalInfo: { paymentId: payment.id }
+        additionalInfo: { paymentId: savedPayment.id }
       });
 
       // 根据支付方式调用相应的支付服务
@@ -87,12 +84,17 @@ export class PaymentService {
       try {
         switch (paymentData.paymentMethod) {
           case PaymentMethod.WECHAT_PAY:
-            // paymentResult = await this.wechatPaymentService.createPayment(paymentData as any);
-            paymentResult = { paymentUrl: 'mock://wechat-pay-url', qrCode: 'mock-qr-code' };
+            paymentResult = await this.wechatPaymentService.createPayment(savedPayment, {
+              paymentId: savedPayment.id,
+              tradeType: paymentData.paymentParams?.tradeType || 'JSAPI',
+              openid: paymentData.paymentParams?.openid,
+            });
             break;
           case PaymentMethod.ALIPAY:
-            // paymentResult = await this.alipayService.createPayment(paymentData as any);
-            paymentResult = { paymentUrl: 'mock://alipay-url', qrCode: 'mock-qr-code' };
+            paymentResult = await this.alipayService.createPayment(savedPayment, {
+              paymentId: savedPayment.id,
+              productCode: paymentData.paymentParams?.productCode || 'QUICK_MSECURITY_PAY',
+            });
             break;
           default:
             throw new BadRequestException('不支持的支付方式');
@@ -107,15 +109,22 @@ export class PaymentService {
           true
         );
 
+        // 记录Prometheus指标
+        this.prometheusService.recordPaymentRequest(paymentData.paymentMethod, 'success');
+
         return {
-          paymentId: payment.id,
-          paymentNo: payment.paymentNo,
+          paymentId: savedPayment.id,
+          paymentNo: savedPayment.paymentNo,
           ...paymentResult,
         };
       } catch (error) {
         // 支付创建失败，更新状态
-        payment.status = PaymentStatus.FAILED;
-        payment.failureReason = error.message;
+        savedPayment.status = PaymentStatus.FAILED;
+        savedPayment.failureReason = error.message;
+        
+        // 记录Prometheus指标
+        this.prometheusService.recordPaymentRequest(paymentData.paymentMethod, 'failed');
+        await this.paymentRepository.save(savedPayment);
 
         // 记录错误日志
         await this.paymentLoggerService.logPaymentCreation({
@@ -125,7 +134,7 @@ export class PaymentService {
           userId,
           orderId: paymentData.orderId,
           errorMessage: error.message,
-          additionalInfo: { paymentId: payment.id }
+          additionalInfo: { paymentId: savedPayment.id }
         });
 
         throw error;
@@ -205,7 +214,7 @@ export class PaymentService {
       }
 
       // 查找支付记录
-      const payment = this.payments.find(p => p.paymentNo === paymentNo);
+      const payment = await this.paymentRepository.findOne({ where: { paymentNo } });
       if (!payment) {
         await this.paymentLoggerService.logSecurityException(
           paymentNo,
@@ -338,7 +347,7 @@ export class PaymentService {
   async getPaymentStatus(paymentId: string) {
     this.logger.log(`查询支付状态: ${paymentId}`);
 
-    const payment = this.payments.find(p => p.id === paymentId);
+    const payment = await this.paymentRepository.findOne({ where: { id: paymentId } });
     if (!payment) {
       throw new NotFoundException('支付记录不存在');
     }
@@ -359,25 +368,27 @@ export class PaymentService {
   async getPaymentList(queryDto: PaymentQueryDto) {
     this.logger.log(`查询支付列表: ${JSON.stringify(queryDto)}`);
 
-    // 模拟分页查询
-    const { page = 1, limit = 20 } = queryDto;
-    const offset = (page - 1) * limit;
+    const queryBuilder = this.paymentRepository.createQueryBuilder('payment');
     
-    let filteredPayments = [...this.payments];
-    
-    // 简单过滤
+    // 应用过滤条件
     if (queryDto.userId) {
-      filteredPayments = filteredPayments.filter(p => p.userId === queryDto.userId);
+      queryBuilder.andWhere('payment.userId = :userId', { userId: queryDto.userId });
     }
     if (queryDto.status) {
-      filteredPayments = filteredPayments.filter(p => p.status === queryDto.status);
+      queryBuilder.andWhere('payment.status = :status', { status: queryDto.status });
     }
     if (queryDto.paymentMethod) {
-      filteredPayments = filteredPayments.filter(p => p.paymentMethod === queryDto.paymentMethod);
+      queryBuilder.andWhere('payment.paymentMethod = :paymentMethod', { paymentMethod: queryDto.paymentMethod });
     }
 
-    const total = filteredPayments.length;
-    const items = filteredPayments.slice(offset, offset + limit);
+    // 分页
+    const page = queryDto.page || 1;
+    const limit = queryDto.limit || 20;
+    const offset = (page - 1) * limit;
+    
+    queryBuilder.skip(offset).take(limit).orderBy('payment.createdAt', 'DESC');
+    
+    const [items, total] = await queryBuilder.getManyAndCount();
 
     return {
       items,
@@ -394,7 +405,7 @@ export class PaymentService {
   async requestRefund(refundDto: RefundDto) {
     this.logger.log(`申请退款: ${JSON.stringify(refundDto)}`);
 
-    const payment = this.payments.find(p => p.id === refundDto.paymentId);
+    const payment = await this.paymentRepository.findOne({ where: { id: refundDto.paymentId } });
     if (!payment) {
       throw new NotFoundException('支付记录不存在');
     }
@@ -420,15 +431,47 @@ export class PaymentService {
   async getPaymentStatistics(startDate?: string, endDate?: string) {
     this.logger.log(`获取支付统计: ${startDate} - ${endDate}`);
 
-    // 模拟统计数据
+    const queryBuilder = this.paymentRepository.createQueryBuilder('payment');
+    
+    if (startDate) {
+      queryBuilder.andWhere('payment.createdAt >= :startDate', { startDate: new Date(startDate) });
+    }
+    if (endDate) {
+      queryBuilder.andWhere('payment.createdAt <= :endDate', { endDate: new Date(endDate) });
+    }
+
+    // 总计统计
+    const totalStats = await queryBuilder
+      .select('COUNT(*)', 'totalCount')
+      .addSelect('COALESCE(SUM(payment.amount), 0)', 'totalAmount')
+      .getRawOne();
+
+    // 成功支付统计
+    const successStats = await queryBuilder
+      .andWhere('payment.status = :status', { status: PaymentStatus.SUCCESS })
+      .select('COUNT(*)', 'successCount')
+      .addSelect('COALESCE(SUM(payment.amount), 0)', 'successAmount')
+      .getRawOne();
+
+    // 退款统计
+    const refundStats = await queryBuilder
+      .andWhere('payment.status IN (:...statuses)', { statuses: [PaymentStatus.REFUNDED, PaymentStatus.PARTIAL_REFUNDED] })
+      .select('COUNT(*)', 'refundCount')
+      .addSelect('COALESCE(SUM(payment.refundedAmount), 0)', 'refundAmount')
+      .getRawOne();
+
+    const totalCount = parseInt(totalStats.totalCount) || 0;
+    const successCount = parseInt(successStats.successCount) || 0;
+    const successRate = totalCount > 0 ? successCount / totalCount : 0;
+
     return {
-      totalAmount: 10000.00,
-      totalCount: 100,
-      successAmount: 9500.00,
-      successCount: 95,
-      refundAmount: 500.00,
-      refundCount: 5,
-      successRate: 0.95,
+      totalAmount: parseFloat(totalStats.totalAmount) || 0,
+      totalCount,
+      successAmount: parseFloat(successStats.successAmount) || 0,
+      successCount,
+      refundAmount: parseFloat(refundStats.refundAmount) || 0,
+      refundCount: parseInt(refundStats.refundCount) || 0,
+      successRate: Math.round(successRate * 10000) / 10000, // 保留4位小数
     };
   }
 
@@ -438,7 +481,7 @@ export class PaymentService {
   async queryPayment(paymentNo: string) {
     this.logger.log(`查询支付记录: ${paymentNo}`);
     
-    const payment = this.payments.find(p => p.paymentNo === paymentNo);
+    const payment = await this.paymentRepository.findOne({ where: { paymentNo } });
     if (!payment) {
       throw new NotFoundException('支付记录不存在');
     }
@@ -452,12 +495,17 @@ export class PaymentService {
     this.logger.log(`查找支付记录: ${JSON.stringify(queryDto)}`);
     
     const { page = 1, limit = 10 } = queryDto;
-    const start = (page - 1) * limit;
-    const end = start + limit;
+    const offset = (page - 1) * limit;
+    
+    const [data, total] = await this.paymentRepository.findAndCount({
+      skip: offset,
+      take: limit,
+      order: { createdAt: 'DESC' }
+    });
     
     return {
-      data: this.payments.slice(start, end),
-      total: this.payments.length,
+      data,
+      total,
       page,
       limit,
     };
@@ -470,7 +518,7 @@ export class PaymentService {
     this.logger.log(`退款处理: ${JSON.stringify(refundDto)}`);
     
     const { paymentNo, amount, reason } = refundDto;
-    const payment = this.payments.find(p => p.paymentNo === paymentNo);
+    const payment = await this.paymentRepository.findOne({ where: { paymentNo } });
     
     if (!payment) {
       throw new NotFoundException('支付记录不存在');
@@ -484,6 +532,8 @@ export class PaymentService {
     payment.refundedAmount = amount;
     payment.refundReason = reason;
     payment.refundedAt = new Date();
+    
+    await this.paymentRepository.save(payment);
     
     return {
       success: true,
@@ -500,7 +550,7 @@ export class PaymentService {
     this.logger.log(`处理回调: ${provider}, ${JSON.stringify(data)}`);
     
     const { paymentNo, status, transactionId } = data;
-    const payment = this.payments.find(p => p.paymentNo === paymentNo);
+    const payment = await this.paymentRepository.findOne({ where: { paymentNo } });
     
     if (!payment) {
       throw new NotFoundException('支付记录不存在');
@@ -509,8 +559,11 @@ export class PaymentService {
     // 更新支付状态
      payment.status = status === 'SUCCESS' ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
      payment.transactionId = transactionId;
-     (payment as any).paidAt = status === 'SUCCESS' ? new Date() : null;
-     payment.updatedAt = new Date();
+     if (status === 'SUCCESS') {
+        payment.paidAt = new Date();
+      }
+     
+     await this.paymentRepository.save(payment);
     
     return {
       success: true,
@@ -577,7 +630,7 @@ export class PaymentService {
       }
 
       // 查找支付记录
-      const payment = this.payments.find(p => p.paymentNo === paymentNo);
+      const payment = await this.paymentRepository.findOne({ where: { paymentNo } });
       if (!payment) {
         await this.paymentLoggerService.logSecurityException(
           paymentNo,

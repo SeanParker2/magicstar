@@ -1,0 +1,468 @@
+.payment-modal {
+  .at-modal {
+    .at-modal__container {
+      width: 90vw;
+      max-width: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .at-modal__header {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      padding: 16px 20px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+    }
+
+    .at-modal__content {
+      background: #fff;
+      padding: 0;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .at-modal__action {
+      background: #fff;
+      border-top: 1px solid #eee;
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+
+      .at-button {
+        flex: 1;
+        border-radius: 8px;
+        font-weight: 600;
+
+        &:first-child {
+          background: #f5f5f5;
+          color: #666;
+          border: 1px solid #ddd;
+        }
+
+        &:last-child {
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          border: none;
+        }
+      }
+    }
+  }
+}
+
+.payment-content {
+  padding: 20px;
+
+  .amount-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+
+    .amount-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.total {
+        border-top: 1px solid #eee;
+        padding-top: 8px;
+        margin-top: 8px;
+
+        .amount-label {
+          font-weight: 600;
+          color: #333;
+        }
+
+        .total-amount {
+          font-size: 18px;
+          font-weight: 700;
+          color: #ff6b6b;
+        }
+      }
+
+      .amount-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .amount-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+  }
+
+  .payment-methods-section {
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .loading-methods {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 12px;
+
+      .loading-text {
+        font-size: 14px;
+        color: #999;
+      }
+    }
+  }
+}
+
+.payment-methods-list {
+  .payment-method-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fff;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      border-color: #667eea;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+    }
+
+    &.selected {
+      border-color: #667eea;
+      background: #f8f9ff;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+    }
+
+    .method-radio {
+      margin-right: 12px;
+
+      .radio-circle {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        &.checked {
+          border-color: #667eea;
+          background: #667eea;
+
+          .radio-dot {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+
+    .method-info {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      gap: 12px;
+
+      .method-details {
+        flex: 1;
+
+        .method-name {
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 4px;
+          display: block;
+        }
+
+        .method-description {
+          font-size: 12px;
+          color: #666;
+          line-height: 1.4;
+          display: block;
+        }
+      }
+    }
+
+    .method-fee {
+      font-size: 12px;
+      color: #ff9800;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+  }
+}
+
+// 支付密码输入弹窗
+.password-input-container {
+  padding: 20px 0;
+
+  .at-input {
+    .at-input__input {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 4px;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .payment-modal {
+    .at-modal {
+      .at-modal__container {
+        width: 95vw;
+      }
+
+      .at-modal__header {
+        padding: 12px 16px;
+        font-size: 16px;
+      }
+
+      .at-modal__action {
+        padding: 12px 16px;
+        gap: 8px;
+
+        .at-button {
+          font-size: 14px;
+          height: 40px;
+        }
+      }
+    }
+  }
+
+  .payment-content {
+    padding: 16px;
+
+    .amount-section {
+      padding: 12px;
+      margin-bottom: 16px;
+
+      .amount-row {
+        &.total {
+          .total-amount {
+            font-size: 16px;
+          }
+        }
+
+        .amount-label {
+          font-size: 13px;
+        }
+
+        .amount-value {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .payment-methods-section {
+      .section-title {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  .payment-methods-list {
+    .payment-method-item {
+      padding: 12px;
+      margin-bottom: 8px;
+
+      .method-radio {
+        margin-right: 8px;
+
+        .radio-circle {
+          width: 18px;
+          height: 18px;
+
+          &.checked {
+            .radio-dot {
+              width: 6px;
+              height: 6px;
+            }
+          }
+        }
+      }
+
+      .method-info {
+        gap: 8px;
+
+        .at-icon {
+          font-size: 20px !important;
+        }
+
+        .method-details {
+          .method-name {
+            font-size: 14px;
+          }
+
+          .method-description {
+            font-size: 11px;
+          }
+        }
+      }
+
+      .method-fee {
+        font-size: 11px;
+      }
+    }
+  }
+
+  .password-input-container {
+    padding: 16px 0;
+
+    .at-input {
+      .at-input__input {
+        font-size: 16px;
+        letter-spacing: 2px;
+      }
+    }
+  }
+}
+
+// 动画效果
+.payment-modal {
+  .at-modal {
+    .at-modal__container {
+      animation: slideInUp 0.3s ease-out;
+    }
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.payment-methods-list {
+  .payment-method-item {
+    animation: fadeInUp 0.3s ease-out;
+    
+    &:nth-child(1) { animation-delay: 0.1s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+    &:nth-child(4) { animation-delay: 0.4s; }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// 加载状态
+.payment-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    
+    .loading-text {
+      font-size: 14px;
+      color: #999;
+    }
+  }
+}
+
+// 错误状态
+.payment-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  
+  .error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    
+    .error-text {
+      font-size: 14px;
+      color: #f44336;
+      text-align: center;
+    }
+  }
+}
+
+// 支付成功状态
+.payment-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  
+  .success-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: #4caf50;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .at-icon {
+        color: #fff;
+        font-size: 30px;
+      }
+    }
+    
+    .success-text {
+      font-size: 16px;
+      color: #4caf50;
+      font-weight: 600;
+    }
+    
+    .success-description {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+    }
+  }
+}

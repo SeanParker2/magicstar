@@ -53,6 +53,7 @@ import { PaymentModule } from './payment/payment.module';
     OrderService,
   ],
   exports: [
+    TypeOrmModule,
     // ProductService,
     // CartService,
     // OrderService,

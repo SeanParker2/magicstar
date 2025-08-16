@@ -6,6 +6,7 @@ import { TarotAlgorithmService } from './tarot-algorithm.service'
 import { TarotCard } from './entities/tarot-card.entity'
 import { TarotSpread } from './entities/tarot-spread.entity'
 import { DivinationRecord } from './entities/divination-record.entity'
+import { MonitoringModule } from '../../monitoring/monitoring.module'
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { DivinationRecord } from './entities/divination-record.entity'
       TarotCard,
       TarotSpread,
       DivinationRecord
-    ])
+    ]),
+    MonitoringModule
   ],
   controllers: [TarotController],
   providers: [

@@ -7,6 +7,8 @@ import { TarotReading } from '../entities/tarot-reading.entity';
 import { TarotEngineService } from './tarot-engine.service';
 import { CreateTarotReadingDto, TarotReadingResultDto } from '../dto/create-tarot-reading.dto';
 import { QueryTarotCardsDto, QueryTarotSpreadsDto, QueryTarotReadingsDto } from '../dto/query-tarot.dto';
+import { PrometheusService } from '../../monitoring/services/prometheus.service';
+import { Cache, CacheEvict } from '../../../common/decorators/cache.decorator';
 
 /**
  * 塔罗牌服务
@@ -21,11 +23,13 @@ export class TarotService {
     @InjectRepository(TarotReading)
     private readonly tarotReadingRepository: Repository<TarotReading>,
     private readonly tarotEngineService: TarotEngineService,
+    private readonly prometheusService: PrometheusService,
   ) {}
 
   /**
    * 获取所有塔罗牌
    */
+  @Cache({ key: 'tarot_cards', ttl: 600, tags: ['tarot', 'cards'] })
   async getAllCards(queryDto: QueryTarotCardsDto): Promise<{
     cards: TarotCard[];
     total: number;
@@ -81,6 +85,7 @@ export class TarotService {
   /**
    * 获取所有牌阵
    */
+  @Cache({ key: 'tarot_spreads', ttl: 600, tags: ['tarot', 'spreads'] })
   async getAllSpreads(queryDto: QueryTarotSpreadsDto): Promise<{
     spreads: TarotSpread[];
     total: number;
@@ -145,11 +150,14 @@ export class TarotService {
   async performReading(userId: number, createDto: CreateTarotReadingDto): Promise<TarotReadingResultDto> {
     const { spreadId, question } = createDto;
 
-    // 验证牌阵
-    const isValidSpread = await this.tarotEngineService.validateSpread(spreadId);
-    if (!isValidSpread) {
-      throw new BadRequestException('无效的牌阵');
-    }
+    try {
+      // 验证牌阵
+      const isValidSpread = await this.tarotEngineService.validateSpread(spreadId);
+      if (!isValidSpread) {
+        // 记录失败的占卜请求指标
+        this.prometheusService.recordDivinationRequest('tarot', 'error');
+        throw new BadRequestException('无效的牌阵');
+      }
 
     // 抽牌
     const { spread, drawnCards } = await this.tarotEngineService.drawCardsForSpread(spreadId);
@@ -186,31 +194,41 @@ export class TarotService {
       1,
     );
 
-    // 返回结果
-    return {
-      id: savedReading.id,
-      spread: {
-        id: spread.id,
-        nameCn: spread.nameCn,
-        name: spread.name,
-        cardCount: spread.cardCount,
-      },
-      question: savedReading.question,
-      drawnCards: drawnCards.map(dc => ({
-        position: dc.position,
-        cardId: dc.card.id,
-        isReversed: dc.isReversed,
-        cardName: dc.card.name,
-        cardNameCn: dc.card.nameCn,
-        meaning: dc.isReversed ? dc.card.reversedMeaning : dc.card.uprightMeaning,
-        imageUrl: dc.card.imageUrl,
-      })),
-      overallInterpretation: interpretation.overallInterpretation,
-      detailedInterpretation: interpretation.detailedInterpretation,
-      summary: interpretation.summary,
-      advice: interpretation.advice,
-      readingTime: savedReading.createdAt,
-    };
+      // 记录成功的占卜请求指标
+      this.prometheusService.recordDivinationRequest('tarot', 'success');
+
+      // 返回结果
+      return {
+        id: savedReading.id,
+        spread: {
+          id: spread.id,
+          nameCn: spread.nameCn,
+          name: spread.name,
+          cardCount: spread.cardCount,
+        },
+        question: savedReading.question,
+        drawnCards: drawnCards.map(dc => ({
+          position: dc.position,
+          cardId: dc.card.id,
+          isReversed: dc.isReversed,
+          cardName: dc.card.name,
+          cardNameCn: dc.card.nameCn,
+          meaning: dc.isReversed ? dc.card.reversedMeaning : dc.card.uprightMeaning,
+          imageUrl: dc.card.imageUrl,
+        })),
+        overallInterpretation: interpretation.overallInterpretation,
+        detailedInterpretation: interpretation.detailedInterpretation,
+        summary: interpretation.summary,
+        advice: interpretation.advice,
+        readingTime: savedReading.createdAt,
+      };
+    } catch (error) {
+      // 记录失败的占卜请求指标（如果还没有记录的话）
+      if (!(error instanceof BadRequestException)) {
+        this.prometheusService.recordDivinationRequest('tarot', 'error');
+      }
+      throw error;
+    }
   }
 
   /**

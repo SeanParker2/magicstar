@@ -1,19 +1,33 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Image } from '@tarojs/components'
-import { createIntersectionObserver } from '@tarojs/taro'
-import './index.scss'
+import React, { useState, useRef, useEffect } from 'react';
+import { Image } from '@tarojs/components';
+import { createIntersectionObserver } from '@tarojs/taro';
+import './index.scss';
 
 interface LazyImageProps {
-  src: string
-  placeholder?: string
-  className?: string
-  style?: React.CSSProperties
-  mode?: 'scaleToFill' | 'aspectFit' | 'aspectFill' | 'widthFix' | 'heightFix' | 'top' | 'bottom' | 'center' | 'left' | 'right' | 'top left' | 'top right' | 'bottom left' | 'bottom right'
-  lazyLoad?: boolean
-  fadeIn?: boolean
-  threshold?: number
-  onLoad?: () => void
-  onError?: () => void
+  src: string;
+  placeholder?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  mode?:
+    | 'scaleToFill'
+    | 'aspectFit'
+    | 'aspectFill'
+    | 'widthFix'
+    | 'heightFix'
+    | 'top'
+    | 'bottom'
+    | 'center'
+    | 'left'
+    | 'right'
+    | 'top left'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom right';
+  lazyLoad?: boolean;
+  fadeIn?: boolean;
+  threshold?: number;
+  onLoad?: () => void;
+  onError?: () => void;
 }
 
 const LazyImage: React.FC<LazyImageProps> = ({
@@ -26,63 +40,61 @@ const LazyImage: React.FC<LazyImageProps> = ({
   fadeIn = true,
   threshold = 0.1,
   onLoad,
-  onError
+  onError,
 }) => {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isInView, setIsInView] = useState(!lazyLoad)
-  const [hasError, setHasError] = useState(false)
-  const imageRef = useRef<HTMLDivElement>(null)
-  const observerRef = useRef<any>(null)
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(!lazyLoad);
+  const [hasError, setHasError] = useState(false);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!lazyLoad) return
+    if (!lazyLoad) return;
 
     // 创建交叉观察器
     observerRef.current = createIntersectionObserver(imageRef.current as any, {
       thresholds: [threshold],
-      observeAll: true
-    })
+      observeAll: true,
+    });
 
-    observerRef.current.observe('.lazy-image-container', (res) => {
+    observerRef.current.observe('.lazy-image-container', res => {
       if (res.intersectionRatio > threshold) {
-        setIsInView(true)
-        observerRef.current?.disconnect()
+        setIsInView(true);
+        observerRef.current?.disconnect();
       }
-    })
+    });
 
     return () => {
-      observerRef.current?.disconnect()
-    }
-  }, [lazyLoad, threshold])
+      observerRef.current?.disconnect();
+    };
+  }, [lazyLoad, threshold]);
 
   const handleLoad = () => {
-    setIsLoaded(true)
-    setHasError(false)
-    onLoad?.()
-  }
+    setIsLoaded(true);
+    setHasError(false);
+    onLoad?.();
+  };
 
   const handleError = () => {
-    setHasError(true)
-    setIsLoaded(false)
-    onError?.()
-  }
+    setHasError(true);
+    setIsLoaded(false);
+    onError?.();
+  };
 
   const imageClasses = [
     'lazy-image',
     className,
     isLoaded && fadeIn ? 'lazy-image--loaded' : '',
-    hasError ? 'lazy-image--error' : ''
-  ].filter(Boolean).join(' ')
+    hasError ? 'lazy-image--error' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div 
-      ref={imageRef}
-      className="lazy-image-container"
-      style={style}
-    >
+    <div ref={imageRef} className="lazy-image-container" style={style}>
       {isInView && (
         <Image
-          src={hasError ? placeholder : (isLoaded ? src : placeholder)}
+          src={hasError ? placeholder : isLoaded ? src : placeholder}
           className={imageClasses}
           mode={mode}
           onLoad={handleLoad}
@@ -90,7 +102,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
           lazyLoad={false} // 我们自己控制懒加载
         />
       )}
-      
+
       {/* 预加载真实图片 */}
       {isInView && !isLoaded && !hasError && (
         <Image
@@ -102,7 +114,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LazyImage
+export default LazyImage;

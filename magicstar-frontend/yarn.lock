@@ -743,39 +743,6 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.27.1"
 
-"@babel/plugin-transform-react-display-name@^7.27.1":
-  version "7.28.0"
-  resolved "https://registry.npmmirror.com/@babel/plugin-transform-react-display-name/-/plugin-transform-react-display-name-7.28.0.tgz"
-  integrity sha512-D6Eujc2zMxKjfa4Zxl4GHMsmhKKZ9VpcqIchJLvwTxad9zWIYulwYItBovpDOoNLISpcZSXoDJ5gaGbQUDqViA==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.27.1"
-
-"@babel/plugin-transform-react-jsx-development@^7.27.1":
-  version "7.27.1"
-  resolved "https://registry.npmmirror.com/@babel/plugin-transform-react-jsx-development/-/plugin-transform-react-jsx-development-7.27.1.tgz"
-  integrity sha512-ykDdF5yI4f1WrAolLqeF3hmYU12j9ntLQl/AOG1HAS21jxyg1Q0/J/tpREuYLfatGdGmXp/3yS0ZA76kOlVq9Q==
-  dependencies:
-    "@babel/plugin-transform-react-jsx" "^7.27.1"
-
-"@babel/plugin-transform-react-jsx@^7.27.1":
-  version "7.27.1"
-  resolved "https://registry.npmmirror.com/@babel/plugin-transform-react-jsx/-/plugin-transform-react-jsx-7.27.1.tgz"
-  integrity sha512-2KH4LWGSrJIkVf5tSiBFYuXDAoWRq2MMwgivCf+93dd0GQi8RXLjKA/0EvRnVV5G0hrHczsquXuD01L8s6dmBw==
-  dependencies:
-    "@babel/helper-annotate-as-pure" "^7.27.1"
-    "@babel/helper-module-imports" "^7.27.1"
-    "@babel/helper-plugin-utils" "^7.27.1"
-    "@babel/plugin-syntax-jsx" "^7.27.1"
-    "@babel/types" "^7.27.1"
-
-"@babel/plugin-transform-react-pure-annotations@^7.27.1":
-  version "7.27.1"
-  resolved "https://registry.npmmirror.com/@babel/plugin-transform-react-pure-annotations/-/plugin-transform-react-pure-annotations-7.27.1.tgz"
-  integrity sha512-JfuinvDOsD9FVMTHpzA/pBLisxpv1aSf+OIV8lgH3MuWrks19R27e6a6DipIg4aX1Zm9Wpb04p8wljfKrVSnPA==
-  dependencies:
-    "@babel/helper-annotate-as-pure" "^7.27.1"
-    "@babel/helper-plugin-utils" "^7.27.1"
-
 "@babel/plugin-transform-regenerator@^7.28.0":
   version "7.28.1"
   resolved "https://registry.npmmirror.com/@babel/plugin-transform-regenerator/-/plugin-transform-regenerator-7.28.1.tgz"
@@ -973,18 +940,6 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
-"@babel/preset-react@^7.27.1":
-  version "7.27.1"
-  resolved "https://registry.npmmirror.com/@babel/preset-react/-/preset-react-7.27.1.tgz"
-  integrity sha512-oJHWh2gLhU9dW9HHr42q0cI0/iHHXTLGe39qvpAZZzagHy0MzYLCnCVV0symeRvzmjHyVU7mw2K06E6u/JwbhA==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.27.1"
-    "@babel/helper-validator-option" "^7.27.1"
-    "@babel/plugin-transform-react-display-name" "^7.27.1"
-    "@babel/plugin-transform-react-jsx" "^7.27.1"
-    "@babel/plugin-transform-react-jsx-development" "^7.27.1"
-    "@babel/plugin-transform-react-pure-annotations" "^7.27.1"
-
 "@babel/preset-typescript@^7.24.1":
   version "7.27.1"
   resolved "https://registry.npmmirror.com/@babel/preset-typescript/-/preset-typescript-7.27.1.tgz"
@@ -1082,16 +1037,6 @@
   version "2.2.0"
   resolved "https://registry.npmmirror.com/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz"
   integrity sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw==
-
-"@esbuild/darwin-x64@0.21.5":
-  version "0.21.5"
-  resolved "https://registry.npmmirror.com/@esbuild/darwin-x64/-/darwin-x64-0.21.5.tgz"
-  integrity sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==
-
-"@esbuild/darwin-x64@0.25.9":
-  version "0.25.9"
-  resolved "https://registry.npmmirror.com/@esbuild/darwin-x64/-/darwin-x64-0.25.9.tgz"
-  integrity sha512-jhHfBzjYTA1IQu8VyrjCX4ApJDnH+ez+IYVEoJHeqJm9VhG9Dh2BYaJritkYK3vMaXrf7Ogr/0MQ8/MeIefsPQ==
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
   version "4.7.0"
@@ -1489,11 +1434,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@parcel/watcher-darwin-x64@2.5.1":
-  version "2.5.1"
-  resolved "https://registry.npmmirror.com/@parcel/watcher-darwin-x64/-/watcher-darwin-x64-2.5.1.tgz"
-  integrity sha512-1ZXDthrnNmwv10A0/3AJNZ9JGlzrF82i3gNQcWOzd7nJ8aj+ILyW1MTxVk35Db0u91oD5Nlk9MBiujMlwmeXZg==
-
 "@parcel/watcher@^2.4.1":
   version "2.5.1"
   resolved "https://registry.npmmirror.com/@parcel/watcher/-/watcher-2.5.1.tgz"
@@ -1615,11 +1555,6 @@
   resolved "https://registry.npmmirror.com/@stencil/core/-/core-2.22.3.tgz"
   integrity sha512-kmVA0M/HojwsfkeHsifvHVIYe4l5tin7J5+DLgtl8h6WWfiMClND5K3ifCXXI2ETDNKiEk21p6jql3Fx9o2rng==
 
-"@swc/core-darwin-x64@1.3.96":
-  version "1.3.96"
-  resolved "https://registry.npmmirror.com/@swc/core-darwin-x64/-/core-darwin-x64-1.3.96.tgz"
-  integrity sha512-mFp9GFfuPg+43vlAdQZl0WZpZSE8sEzqL7sr/7Reul5McUHP0BaLsEzwjvD035ESfkY8GBZdLpMinblIbFNljQ==
-
 "@swc/core@1.3.96":
   version "1.3.96"
   resolved "https://registry.npmmirror.com/@swc/core/-/core-1.3.96.tgz"
@@ -1671,11 +1606,6 @@
   version "4.1.5"
   resolved "https://registry.npmmirror.com/@tarojs/api/-/api-4.1.5.tgz"
   integrity sha512-lY1LBV3IZEF/2pkZK/sQ7PKOduRMJpxrw3AIs0zhB0auFO5JaTpV7CxALK6rg5BzhLW2+6bbVcPIWES3LlD9wQ==
-
-"@tarojs/binding-darwin-x64@4.1.5":
-  version "4.1.5"
-  resolved "https://registry.npmmirror.com/@tarojs/binding-darwin-x64/-/binding-darwin-x64-4.1.5.tgz"
-  integrity sha512-RJTtYlsnmc5flnVWFgB/7Opp0t7ABieLR3oXb2/mValfWECEj6RbzpS4xSsnfDrKSCva8DrVMI9loYgWSboIfA==
 
 "@tarojs/binding@4.1.5":
   version "4.1.5"
@@ -1772,11 +1702,6 @@
   version "0.0.13"
   resolved "https://registry.npmmirror.com/@tarojs/plugin-doctor-darwin-universal/-/plugin-doctor-darwin-universal-0.0.13.tgz"
   integrity sha512-qIv94zgybce+Wq6/Bgy+Np+3BM2SYipuuKTg4LU3ALfJ+YxJetYDcbat9GPxulZqyvxKshYaYtusfwzCu+QWEw==
-
-"@tarojs/plugin-doctor-darwin-x64@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.npmmirror.com/@tarojs/plugin-doctor-darwin-x64/-/plugin-doctor-darwin-x64-0.0.13.tgz"
-  integrity sha512-zjx3OGlcyOTr+VoRcFmQQcsXscwNucpynlhEYS3ZlofVe9qI0LeTMb/jbMriT/W0c1b4nlVaM8sv+HKz4NKUeA==
 
 "@tarojs/plugin-doctor@^0.0.13":
   version "0.0.13"
@@ -7487,11 +7412,6 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
-
-lightningcss-darwin-x64@1.30.1:
-  version "1.30.1"
-  resolved "https://registry.npmmirror.com/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.30.1.tgz"
-  integrity sha512-k1EvjakfumAQoTfcXUcHQZhSpLlkAuEkdMBsI/ivWw9hL+7FtilQc0Cy3hrx0AAQrVtQAbMI7YjCgYgvn37PzA==
 
 lightningcss@^1.24.1:
   version "1.30.1"

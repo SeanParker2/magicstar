@@ -11,6 +11,7 @@ import { QueryBirthChartDto } from './dto/query-birth-chart.dto';
 import { AstrologyApiService, BirthChartRequest } from './astrology-api.service';
 import { AstrologyAlgorithmService } from './astrology-algorithm.service';
 import { User } from '../../user/entities/user.entity';
+import { PrometheusService } from '../../monitoring/services/prometheus.service';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface BirthChartListResponse {
@@ -51,6 +52,7 @@ export class AstrologyService {
     private interpretationRepository: Repository<ChartInterpretation>,
     private astrologyApiService: AstrologyApiService,
     private algorithmService: AstrologyAlgorithmService,
+    private readonly prometheusService: PrometheusService,
   ) {}
 
   /**
@@ -122,6 +124,9 @@ export class AstrologyService {
 
       this.logger.log(`Birth chart created successfully with ID: ${savedChart.id}`);
 
+      // 记录成功的占卜请求指标
+      this.prometheusService.recordDivinationRequest('astrology', 'success');
+
       return {
         chart: savedChart,
         planets,
@@ -131,6 +136,8 @@ export class AstrologyService {
       };
     } catch (error) {
       this.logger.error('Failed to create birth chart:', error);
+      // 记录失败的占卜请求指标
+      this.prometheusService.recordDivinationRequest('astrology', 'error');
       throw error;
     }
   }

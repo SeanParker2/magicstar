@@ -22,6 +22,10 @@ import { Planet } from '../modules/divination/astrology/entities/planet.entity';
 import { House } from '../modules/divination/astrology/entities/house.entity';
 import { Aspect } from '../modules/divination/astrology/entities/aspect.entity';
 import { ChartInterpretation } from '../modules/divination/astrology/entities/chart-interpretation.entity';
+import { FortuneTemplate } from '../fortune/entities/fortune-template.entity';
+import { UserFortune } from '../fortune/entities/user-fortune.entity';
+import { FortuneHistory } from '../fortune/entities/fortune-history.entity';
+import { FortuneSubscription } from '../fortune/entities/fortune-subscription.entity';
 import { DatabaseOptimizerService } from './database-optimizer.service';
 import { RedisOptimizerService } from '../common/services/redis-optimizer.service';
 
@@ -61,6 +65,10 @@ import { RedisOptimizerService } from '../common/services/redis-optimizer.servic
                House,
                Aspect,
                ChartInterpretation,
+               FortuneTemplate,
+               UserFortune,
+               FortuneHistory,
+               FortuneSubscription,
              ],
             synchronize: true,
             logging: false,
