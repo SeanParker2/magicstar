@@ -3,9 +3,9 @@ import { View, Text } from '@tarojs/components';
 import { AtGrid, AtCard } from 'taro-ui';
 import Taro from '@tarojs/taro';
 
-import 'taro-ui/dist/style/components/grid.scss';
-import 'taro-ui/dist/style/components/card.scss';
-import './index.scss';
+// import 'taro-ui/dist/style/components/grid.css';
+// import 'taro-ui/dist/style/components/card.css';
+import './index.css';
 
 interface DivinationState {
   divinationTypes: Array<{
@@ -72,22 +72,33 @@ export default class Divination extends Component<PropsWithChildren, DivinationS
   handleDivinationClick = (item: any, _index: number) => {
     console.log('选择占卜类型:', item);
 
-    Taro.showToast({
-      title: `${item.text}功能开发中`,
-      icon: 'none',
-    });
-
-    // TODO: 根据占卜类型跳转到对应页面
-    // switch (item.value) {
-    //   case 'tarot':
-    //     Taro.navigateTo({ url: '/pages/tarot/index' })
-    //     break
-    //   case 'astrology':
-    //     Taro.navigateTo({ url: '/pages/astrology/index' })
-    //     break
-    //   default:
-    //     break
-    // }
+    // 根据占卜类型跳转到对应页面
+    switch (item.value) {
+      case 'tarot':
+        Taro.navigateTo({ url: '/pages/tarot/index' });
+        break;
+      case 'astrology':
+        Taro.navigateTo({ url: '/pages/ai/index' });
+        break;
+      case 'fortune':
+        Taro.navigateTo({ url: '/pages/fortune/index' });
+        break;
+      case 'love':
+        Taro.navigateTo({ url: '/pages/tarot/index?type=love' });
+        break;
+      case 'career':
+        Taro.navigateTo({ url: '/pages/tarot/index?type=career' });
+        break;
+      case 'health':
+        Taro.navigateTo({ url: '/pages/fortune/index?type=health' });
+        break;
+      default:
+        Taro.showToast({
+          title: `${item.text}功能开发中`,
+          icon: 'none',
+        });
+        break;
+    }
   };
 
   render() {

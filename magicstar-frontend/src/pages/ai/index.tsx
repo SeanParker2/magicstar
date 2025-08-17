@@ -3,7 +3,7 @@ import { useLoad } from '@tarojs/taro'
 import Taro from '@tarojs/taro'
 import { useState } from 'react'
 import { aiService } from '../../services/ai'
-import './index.scss'
+import './index.css'
 
 interface AiRecord {
   id: string

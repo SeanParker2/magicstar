@@ -49,6 +49,16 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       },
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
+        
+        // 忽略第三方库的Sass弃用警告
+        chain.stats({
+          warningsFilter: [
+            /Deprecation Warning.*taro-ui/,
+            /Global built-in functions are deprecated/,
+            /@import.*deprecated/,
+            /repetitive deprecation warnings omitted/
+          ]
+        })
       }
     },
     h5: {
@@ -78,6 +88,21 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       },
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
+        
+        // 全局忽略第三方库警告
+        chain.stats({
+          warnings: false,
+          warningsFilter: [
+            /sass-loader/,
+            /taro-ui/,
+            /deprecation/i,
+            /Global built-in functions are deprecated/i,
+            /@import.*deprecated/i,
+            /mix\(#FFF/i
+          ]
+        })
+        
+        // 使用默认sass-loader配置
       }
     },
     rn: {

@@ -2,7 +2,7 @@ import { View, Text, Image } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro, { useRouter } from '@tarojs/taro';
 import { tarotService, TarotCard } from '../../../services/tarot';
-import './index.scss';
+import './index.css';
 
 interface Card extends TarotCard {
   isReversed: boolean;

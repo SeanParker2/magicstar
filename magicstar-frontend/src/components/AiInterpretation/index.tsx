@@ -2,7 +2,7 @@ import { View, Text, Button, Textarea } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
 import { aiService, InterpretationResult, QualityAssessment } from '../../services/ai';
-import './index.scss';
+import './index.css';
 
 interface AiInterpretationProps {
   type: 'tarot' | 'astrology' | 'numerology';

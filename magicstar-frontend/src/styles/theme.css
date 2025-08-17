@@ -1,0 +1,57 @@
+:root {
+  /* Magic Star 设计系统色彩 */
+
+  /* 主色调 - 神秘紫色系 */
+  --primary-color: #6B46C1; /* 深紫色 */
+  --primary-light: #8B5CF6; /* 浅紫色 */
+  --primary-dark: #553C9A; /* 更深紫色 */
+
+  /* 辅助色 - 星空金色系 */
+  --secondary-color: #F59E0B; /* 金色 */
+  --secondary-light: #FCD34D; /* 浅金色 */
+  --secondary-dark: #D97706; /* 深金色 */
+
+  /* 背景色 */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-dark: #1E293B;
+
+  /* 文本色 */
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --text-light: #FFFFFF;
+
+  /* 边框色 */
+  --border-light: #E5E7EB;
+  --border-medium: #D1D5DB;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* 字体大小 */
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-md: 16px;
+  --font-lg: 18px;
+  --font-xl: 20px;
+
+  /* 动画时间 */
+  --transition-fast: 0.15s;
+  --transition-normal: 0.3s;
+  --transition-slow: 0.5s;
+}

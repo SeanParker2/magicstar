@@ -1,0 +1,246 @@
+@import '../../styles/variables.css';
+
+.tarot-card {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  perspective: 1000px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  &--small {
+    width: 80px;
+    height: 140px;
+  }
+  
+  &--medium {
+    width: 120px;
+    height: 210px;
+  }
+  
+  &--large {
+    width: 160px;
+    height: 280px;
+  }
+  
+  &--flipped {
+    .tarot-card__inner {
+      transform: rotateY(180deg);
+    }
+  }
+  
+  &--reversed {
+    .tarot-card__front {
+      transform: rotate(180deg);
+    }
+  }
+  
+  &__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  
+  &__back,
+  &__front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 2px solid $color-border;
+  }
+  
+  &__back {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &__back-image {
+    width: 80%;
+    height: 80%;
+    border-radius: 8px;
+  }
+  
+  &__front {
+    transform: rotateY(180deg);
+    background: $color-bg;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__image-container {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
+  
+  &__loading,
+  &__error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  &__loading-text,
+  &__error-text {
+    font-size: 12px;
+    color: $color-text-secondary;
+  }
+  
+  &__info {
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid $color-border;
+  }
+  
+  &__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-text-primary;
+    text-align: center;
+    margin-bottom: 2px;
+    line-height: 1.2;
+  }
+  
+  &__name-en {
+    font-size: 10px;
+    color: $color-text-secondary;
+    text-align: center;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  
+  &__meaning {
+    margin-top: 4px;
+  }
+  
+  &__meaning-text {
+    font-size: 10px;
+    color: $color-text-secondary;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  &__keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  
+  &__keyword {
+    font-size: 8px;
+    padding: 1px 4px;
+    background: $color-primary;
+    color: white;
+    border-radius: 8px;
+    line-height: 1.2;
+  }
+  
+  &__reversed-indicator {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: $color-warning;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    z-index: 10;
+  }
+  
+  &__reversed-text {
+    line-height: 1;
+  }
+}
+
+// 小尺寸特殊样式
+.tarot-card--small {
+  .tarot-card__name {
+    font-size: 12px;
+  }
+  
+  .tarot-card__name-en {
+    font-size: 8px;
+  }
+  
+  .tarot-card__meaning-text {
+    font-size: 8px;
+  }
+  
+  .tarot-card__keyword {
+    font-size: 6px;
+    padding: 1px 2px;
+  }
+  
+  .tarot-card__info {
+    padding: 4px;
+  }
+}
+
+// 大尺寸特殊样式
+.tarot-card--large {
+  .tarot-card__name {
+    font-size: 16px;
+  }
+  
+  .tarot-card__name-en {
+    font-size: 12px;
+  }
+  
+  .tarot-card__meaning-text {
+    font-size: 12px;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+  
+  .tarot-card__keyword {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  
+  .tarot-card__info {
+    padding: 12px;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .tarot-card {
+    &--medium {
+      width: 100px;
+      height: 175px;
+    }
+    
+    &--large {
+      width: 140px;
+      height: 245px;
+    }
+  }
+}

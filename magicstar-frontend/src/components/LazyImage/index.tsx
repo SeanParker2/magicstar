@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Image } from '@tarojs/components';
 import { createIntersectionObserver } from '@tarojs/taro';
-import './index.scss';
+import './index.css';
 
 interface LazyImageProps {
   src: string;

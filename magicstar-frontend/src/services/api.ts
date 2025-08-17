@@ -4,7 +4,7 @@ import type { RequestConfig } from '../utils/requestOptimizer';
 
 // API基础配置
 const BASE_URL =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://api.magicstar.com';
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://api.magicstar.com';
 
 // 初始化请求优化器
 const requestOptimizer = RequestOptimizer.getInstance();

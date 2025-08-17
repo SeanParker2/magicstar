@@ -5,11 +5,11 @@ import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { shopService } from '../../../services/shop';
 import type { Product, ProductListParams } from '../../../services/shop';
 
-import 'taro-ui/dist/style/components/search-bar.scss';
-import 'taro-ui/dist/style/components/button.scss';
-import 'taro-ui/dist/style/components/load-more.scss';
-import 'taro-ui/dist/style/components/float-layout.scss';
-import './index.scss';
+// import 'taro-ui/dist/style/components/search-bar.css';
+// import 'taro-ui/dist/style/components/button.css';
+// import 'taro-ui/dist/style/components/load-more.css';
+// import 'taro-ui/dist/style/components/float-layout.css';
+import './index.css';
 
 interface ProductsState {
   products: Product[];

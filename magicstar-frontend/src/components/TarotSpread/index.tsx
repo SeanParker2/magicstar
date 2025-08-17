@@ -5,7 +5,7 @@ import {
   TarotCard as TarotCardType,
 } from '../../services/divination';
 import TarotCard from '../TarotCard';
-import './index.scss';
+import './index.css';
 
 interface DrawnCard {
   position: number;

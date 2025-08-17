@@ -5,5 +5,8 @@
     "axios": "^1.11.0",
     "express-rate-limit": "^8.0.1",
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.27.1"
   }
 }

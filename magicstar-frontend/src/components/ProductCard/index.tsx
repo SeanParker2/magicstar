@@ -3,7 +3,7 @@ import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import type { Product } from '../../services/shop';
 
-import './index.scss';
+import './index.css';
 
 interface ProductCardProps {
   product: Product;

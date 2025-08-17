@@ -3,10 +3,10 @@ import { View, Text } from '@tarojs/components';
 import { AtList, AtListItem, AtAvatar, AtButton } from 'taro-ui';
 import Taro from '@tarojs/taro';
 
-import 'taro-ui/dist/style/components/list.scss';
-import 'taro-ui/dist/style/components/avatar.scss';
-import 'taro-ui/dist/style/components/button.scss';
-import './index.scss';
+// import 'taro-ui/dist/style/components/list.css';
+// import 'taro-ui/dist/style/components/avatar.css';
+// import 'taro-ui/dist/style/components/button.css';
+import './index.css';
 
 interface ProfileState {
   userInfo: {

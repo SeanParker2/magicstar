@@ -3,7 +3,7 @@ import { View, Text, Canvas } from '@tarojs/components';
 import { AtIcon, AtButton } from 'taro-ui';
 import Taro from '@tarojs/taro';
 import { FortuneData } from '../FortuneCard';
-import './index.scss';
+import './index.css';
 
 export interface ChartData {
   /** 日期 */

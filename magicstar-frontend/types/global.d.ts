@@ -7,7 +7,7 @@ declare module '*.jpeg';
 declare module '*.svg';
 declare module '*.css';
 declare module '*.less';
-declare module '*.scss';
+declare module '*.css';
 declare module '*.sass';
 declare module '*.styl';
 

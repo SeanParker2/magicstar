@@ -4,7 +4,7 @@ import Taro, { useRouter } from '@tarojs/taro';
 import { tarotService, DivinationResult } from '../../../services/tarot';
 import AiInterpretation from '../../../components/AiInterpretation';
 import { InterpretationResult } from '../../../services/ai';
-import './index.scss';
+import './index.css';
 
 const TarotResult = () => {
   const router = useRouter();

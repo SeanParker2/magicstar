@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { AtCard, AtButton, AtIcon, AtTag, AtLoadMore, AtSearchBar } from 'taro-ui';
 import { FortuneService, Fortune, FortuneType } from '../../../services/fortune';
-import './index.scss';
+import './index.css';
 
 // 使用服务层的Fortune接口
 type FortuneHistoryItem = Fortune;

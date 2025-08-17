@@ -7,7 +7,7 @@ import {
   QualityAssessment,
   OptimizationResult,
 } from '../../../services/ai';
-import './index.scss';
+import './index.css';
 
 const AiDetail = () => {
   const router = useRouter();

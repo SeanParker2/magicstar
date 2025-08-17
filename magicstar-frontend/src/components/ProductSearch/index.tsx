@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
 import { AtSearchBar, AtIcon, AtTag, AtActivityIndicator } from 'taro-ui';
 // import Taro from '@tarojs/taro';
-import './index.scss';
+import './index.css';
 
 // 搜索建议接口
 interface SearchSuggestion {

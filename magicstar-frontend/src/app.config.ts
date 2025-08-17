@@ -21,6 +21,7 @@ export default defineAppConfig({
     'pages/shop/order/index',
     'pages/shop/order-detail/index',
     'pages/shop/payment/index',
+    'pages/shop/order-success/index',
   ],
   window: {
     backgroundTextStyle: 'light',
@@ -30,33 +31,33 @@ export default defineAppConfig({
   },
   tabBar: {
     color: '#999999',
-    selectedColor: '#6366f1',
-    backgroundColor: '#ffffff',
-    borderStyle: 'black',
+    selectedColor: '#E4DED7',
+    backgroundColor: '#1A1D25',
+    borderStyle: 'white',
     list: [
       {
         pagePath: 'pages/index/index',
         text: '首页',
-        iconPath: 'assets/icons/home.svg',
-        selectedIconPath: 'assets/icons/home-active.svg'
+        iconPath: 'assets/icons/ic_tab_home_unselected.svg',
+        selectedIconPath: 'assets/icons/ic_tab_home_selected.svg'
       },
       {
         pagePath: 'pages/divination/index',
-        text: '占卜',
-        iconPath: 'assets/icons/divination.svg',
-        selectedIconPath: 'assets/icons/divination-active.svg'
+        text: '星盘',
+        iconPath: 'assets/icons/ic_tab_astrolabe_unselected.svg',
+        selectedIconPath: 'assets/icons/ic_tab_astrolabe_selected.svg'
       },
       {
         pagePath: 'pages/shop/index',
         text: '商城',
-        iconPath: 'assets/icons/shop.svg',
-        selectedIconPath: 'assets/icons/shop-active.svg'
+        iconPath: 'assets/icons/ic_tab_store_unselected.svg',
+        selectedIconPath: 'assets/icons/ic_tab_store_selected.svg'
       },
       {
         pagePath: 'pages/profile/index',
         text: '我的',
-        iconPath: 'assets/icons/profile.svg',
-        selectedIconPath: 'assets/icons/profile-active.svg'
+        iconPath: 'assets/icons/ic_tab_profile_unselected.svg',
+        selectedIconPath: 'assets/icons/ic_tab_profile_selected.svg'
       }
     ],
   },

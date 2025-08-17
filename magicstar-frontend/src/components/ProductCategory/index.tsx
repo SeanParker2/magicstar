@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
 import { AtIcon, AtBadge, AtActivityIndicator } from 'taro-ui';
 // import Taro from '@tarojs/taro';
-import './index.scss';
+import './index.css';
 
 // 商品分类接口
 interface Category {

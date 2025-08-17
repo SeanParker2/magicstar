@@ -5,11 +5,12 @@ import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { shopService } from '../../../services/shop';
 import type { Product, ProductDetail as ProductDetailType } from '../../../services/shop';
 
-import 'taro-ui/dist/style/components/button.scss';
-import 'taro-ui/dist/style/components/input-number.scss';
-import 'taro-ui/dist/style/components/tabs.scss';
-import 'taro-ui/dist/style/components/float-layout.scss';
-import './index.scss';
+// 移除taro-ui样式导入以避免@charset错误
+// import 'taro-ui/dist/style/components/button.css';
+// import 'taro-ui/dist/style/components/input-number.css';
+// import 'taro-ui/dist/style/components/tabs.css';
+// import 'taro-ui/dist/style/components/float-layout.css';
+import './index.css';
 
 interface ProductDetailState {
   product: ProductDetailType | null;

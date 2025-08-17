@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, ComponentType } from 'react';
 import { View } from '@tarojs/components';
-import './index.scss';
+import './index.css';
 
 interface LazyRouteProps {
   fallback?: React.ReactNode;

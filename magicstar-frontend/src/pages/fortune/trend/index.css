@@ -1,0 +1,292 @@
+@import '../../../styles/variables.css';
+
+.fortune-trend-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.trend-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  
+  .loading-text {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 28px;
+  }
+}
+
+.period-selector {
+  margin-bottom: 30px;
+  
+  .at-segmented-control {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    
+    .at-segmented-control__item {
+      border-radius: 20px;
+      font-size: 26px;
+      padding: 15px 0;
+      
+      &.at-segmented-control__item--active {
+        background: linear-gradient(135deg, #6190E8, #A7BFE8);
+        color: white;
+        box-shadow: 0 4px 15px rgba(97, 144, 232, 0.3);
+      }
+    }
+  }
+}
+
+.trend-content {
+  .stats-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 30px;
+    
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      
+      .stats-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: #333;
+      }
+      
+      .trend-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        .trend-text {
+          font-size: 24px;
+          font-weight: 500;
+        }
+      }
+    }
+    
+    .stats-grid {
+      display: flex;
+      justify-content: space-around;
+      
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        .stat-label {
+          font-size: 24px;
+          color: #666;
+          margin-bottom: 8px;
+        }
+        
+        .stat-value {
+          font-size: 36px;
+          font-weight: 700;
+          color: #333;
+          
+          &.high {
+            color: #52c41a;
+          }
+          
+          &.low {
+            color: #f5222d;
+          }
+        }
+      }
+    }
+  }
+  
+  .chart-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 30px;
+    
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #f0f0f0;
+      
+      .chart-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: #333;
+      }
+      
+      .at-button {
+        border-radius: 20px;
+        height: 60px;
+        padding: 0 20px;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        &.at-button--secondary {
+          background: rgba(97, 144, 232, 0.1);
+          color: #6190E8;
+          border: 1px solid rgba(97, 144, 232, 0.3);
+        }
+      }
+    }
+    
+    .chart-container {
+      .trend-canvas {
+        width: 100%;
+        height: 400px;
+        border-radius: 15px;
+        background: #fff;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    
+    .at-button {
+      flex: 1;
+      border-radius: 25px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 26px;
+      
+      &.at-button--primary {
+        background: linear-gradient(135deg, #6190E8, #A7BFE8);
+        border: none;
+        box-shadow: 0 4px 15px rgba(97, 144, 232, 0.3);
+      }
+      
+      &.at-button--secondary {
+        background: rgba(255, 255, 255, 0.9);
+        color: #6190E8;
+        border: 1px solid rgba(97, 144, 232, 0.3);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+.trend-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  
+  .empty-text {
+    margin: 20px 0 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 28px;
+    font-weight: 500;
+  }
+  
+  .empty-tip {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.4;
+  }
+}
+
+// 日历组件样式覆盖
+.at-calendar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  
+  .at-calendar__container {
+    background: white;
+    border-radius: 20px 20px 0 0;
+    margin-top: 20vh;
+  }
+}
+
+// 响应式设计
+@media (max-width: 750px) {
+  .fortune-trend-container {
+    padding: 15px;
+  }
+  
+  .trend-content {
+    .stats-card {
+      .stats-header {
+        .stats-title {
+          font-size: 28px;
+        }
+        
+        .trend-indicator {
+          .trend-text {
+            font-size: 22px;
+          }
+        }
+      }
+      
+      .stats-grid {
+        .stat-item {
+          .stat-label {
+            font-size: 22px;
+          }
+          
+          .stat-value {
+            font-size: 32px;
+          }
+        }
+      }
+    }
+    
+    .chart-card {
+      .chart-header {
+        .chart-title {
+          font-size: 28px;
+        }
+        
+        .at-button {
+          height: 55px;
+          font-size: 20px;
+        }
+      }
+      
+      .chart-container {
+        .trend-canvas {
+          height: 300px;
+        }
+      }
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+      
+      .at-button {
+        height: 70px;
+        font-size: 24px;
+      }
+    }
+  }
+}

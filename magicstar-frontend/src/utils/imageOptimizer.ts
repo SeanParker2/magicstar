@@ -95,6 +95,17 @@ export class ImageOptimizer {
   // 获取图片信息
   async getImageInfo(src: string): Promise<ImageInfo> {
     try {
+      // SVG文件特殊处理，Taro.getImageInfo不支持SVG
+      if (src.toLowerCase().endsWith('.svg')) {
+        return {
+          width: 0,
+          height: 0,
+          size: 0,
+          format: 'svg',
+          url: src,
+        };
+      }
+      
       const result = await Taro.getImageInfo({ src });
       return {
         width: result.width,

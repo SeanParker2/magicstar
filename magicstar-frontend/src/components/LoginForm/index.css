@@ -1,0 +1,490 @@
+@import '../../styles/variables.css';
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background: $color-bg;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  
+  &__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: $color-text-primary;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  &__subtitle {
+    font-size: 14px;
+    color: $color-text-secondary;
+    line-height: 1.4;
+    display: block;
+  }
+  
+  &__form {
+    width: 100%;
+  }
+  
+  &__field {
+    margin-bottom: 20px;
+    position: relative;
+    
+    &--verify {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .at-input {
+      background: $color-bg-secondary;
+      border-radius: 12px;
+      border: 1px solid $color-border;
+      transition: all 0.3s ease;
+      
+      &:focus-within {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+      }
+      
+      &.at-input--error {
+        border-color: $color-error;
+        
+        &:focus-within {
+          box-shadow: 0 0 0 3px rgba($color-error, 0.1);
+        }
+      }
+    }
+    
+    .at-input__input {
+      padding: 16px;
+      font-size: 16px;
+      color: $color-text-primary;
+      
+      &::placeholder {
+        color: $color-text-placeholder;
+      }
+    }
+  }
+  
+  &__verify-input {
+    flex: 1;
+  }
+  
+  &__verify-btn {
+    flex-shrink: 0;
+    height: 54px;
+    min-width: 100px;
+    border-radius: 12px;
+    font-size: 14px;
+    
+    &.at-button--disabled {
+      background: $color-bg-disabled;
+      color: $color-text-disabled;
+      border-color: $color-border;
+    }
+  }
+  
+  &__error {
+    display: block;
+    font-size: 12px;
+    color: $color-error;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  
+  &__options {
+    margin-bottom: 20px;
+    
+    .at-checkbox {
+      .at-checkbox__option {
+        padding: 8px 0;
+        
+        .at-checkbox__option-wrap {
+          align-items: center;
+        }
+        
+        .at-checkbox__option-cnt {
+          font-size: 14px;
+          color: $color-text-secondary;
+          margin-left: 8px;
+        }
+        
+        .at-checkbox__icon-cnt {
+          .at-icon {
+            color: $color-primary;
+          }
+        }
+      }
+    }
+  }
+  
+  &__agreement {
+    margin-bottom: 24px;
+    
+    .at-checkbox {
+      .at-checkbox__option {
+        padding: 12px 0;
+        
+        .at-checkbox__option-cnt {
+          font-size: 13px;
+          color: $color-text-secondary;
+          line-height: 1.4;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+  
+  &__submit {
+    margin-bottom: 24px;
+  }
+  
+  &__submit-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+    border: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba($color-primary, 0.3);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &.at-button--loading {
+      .at-loading {
+        color: white;
+      }
+    }
+  }
+  
+  &__links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  &__link {
+    font-size: 14px;
+    color: $color-primary;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: $color-primary-dark;
+      text-decoration: underline;
+    }
+    
+    &:active {
+      color: $color-primary-light;
+    }
+  }
+  
+  &__third-party {
+    border-top: 1px solid $color-border;
+    padding-top: 24px;
+  }
+  
+  &__divider {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: $color-border;
+      z-index: 1;
+    }
+  }
+  
+  &__divider-text {
+    display: inline-block;
+    padding: 0 16px;
+    background: $color-bg;
+    font-size: 12px;
+    color: $color-text-secondary;
+    position: relative;
+    z-index: 2;
+  }
+  
+  &__third-party-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  &__third-party-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid $color-border;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &--wechat {
+      background: #07c160;
+      border-color: #07c160;
+      
+      &:hover {
+        background: #06ad56;
+        box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+      }
+    }
+    
+    &--qq {
+      background: #1296db;
+      border-color: #1296db;
+      
+      &:hover {
+        background: #0f7fb8;
+        box-shadow: 0 4px 12px rgba(18, 150, 219, 0.3);
+      }
+    }
+    
+    &--weibo {
+      background: #e6162d;
+      border-color: #e6162d;
+      
+      &:hover {
+        background: #c41425;
+        box-shadow: 0 4px 12px rgba(230, 22, 45, 0.3);
+      }
+    }
+  }
+  
+  &__third-party-text {
+    font-size: 12px;
+    color: white;
+    font-weight: 600;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .login-form {
+    max-width: 100%;
+    padding: 24px 20px;
+    border-radius: 12px;
+    
+    &__title {
+      font-size: 24px;
+    }
+    
+    &__subtitle {
+      font-size: 13px;
+    }
+    
+    &__field {
+      margin-bottom: 16px;
+      
+      &--verify {
+        gap: 8px;
+      }
+    }
+    
+    &__verify-btn {
+      height: 48px;
+      min-width: 80px;
+      font-size: 12px;
+    }
+    
+    &__submit-btn {
+      height: 44px;
+      font-size: 15px;
+    }
+    
+    &__links {
+      justify-content: center;
+      gap: 16px;
+    }
+    
+    &__third-party-buttons {
+      gap: 12px;
+    }
+    
+    &__third-party-btn {
+      width: 50px;
+      height: 50px;
+    }
+    
+    &__third-party-text {
+      font-size: 10px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    padding: 20px 16px;
+    
+    &__header {
+      margin-bottom: 24px;
+    }
+    
+    &__title {
+      font-size: 22px;
+    }
+    
+    &__field {
+      margin-bottom: 14px;
+      
+      &--verify {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+    
+    &__verify-btn {
+      width: 100%;
+      height: 44px;
+    }
+    
+    &__submit {
+      margin-bottom: 20px;
+    }
+    
+    &__submit-btn {
+      height: 42px;
+      font-size: 14px;
+    }
+    
+    &__links {
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    &__third-party {
+      padding-top: 20px;
+    }
+    
+    &__divider {
+      margin-bottom: 16px;
+    }
+    
+    &__third-party-buttons {
+      gap: 10px;
+    }
+    
+    &__third-party-btn {
+      width: 45px;
+      height: 45px;
+    }
+    
+    &__third-party-text {
+      font-size: 9px;
+    }
+  }
+}
+
+// 深色模式支持
+@media (prefers-color-scheme: dark) {
+  .login-form {
+    background: $color-bg-dark;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    &__title {
+      color: $color-text-primary-dark;
+    }
+    
+    &__subtitle {
+      color: $color-text-secondary-dark;
+    }
+    
+    &__field {
+      .at-input {
+        background: $color-bg-secondary-dark;
+        border-color: $color-border-dark;
+        
+        &:focus-within {
+          border-color: $color-primary;
+        }
+      }
+      
+      .at-input__input {
+        color: $color-text-primary-dark;
+        
+        &::placeholder {
+          color: $color-text-placeholder-dark;
+        }
+      }
+    }
+    
+    &__error {
+      color: $color-error-dark;
+    }
+    
+    &__options,
+    &__agreement {
+      .at-checkbox {
+        .at-checkbox__option {
+          .at-checkbox__option-cnt {
+            color: $color-text-secondary-dark;
+          }
+        }
+      }
+    }
+    
+    &__link {
+      color: $color-primary-light;
+      
+      &:hover {
+        color: $color-primary;
+      }
+    }
+    
+    &__third-party {
+      border-top-color: $color-border-dark;
+    }
+    
+    &__divider {
+      &::before {
+        background: $color-border-dark;
+      }
+    }
+    
+    &__divider-text {
+      background: $color-bg-dark;
+      color: $color-text-secondary-dark;
+    }
+    
+    &__third-party-btn {
+      border-color: $color-border-dark;
+    }
+  }
+}

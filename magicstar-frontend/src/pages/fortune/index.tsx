@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { AtCard, AtButton, AtIcon, AtProgress, AtTag } from 'taro-ui';
-import './index.scss';
+import './index.css';
 
 interface FortuneData {
   id: string;

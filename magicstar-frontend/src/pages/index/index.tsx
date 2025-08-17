@@ -1,69 +1,53 @@
 import { Component, PropsWithChildren } from 'react';
-import { View, Text, Swiper, SwiperItem } from '@tarojs/components';
-import { AtGrid, AtCard, AtButton } from 'taro-ui';
+import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import './index.css';
 
-import 'taro-ui/dist/style/components/grid.scss';
-import 'taro-ui/dist/style/components/card.scss';
-import 'taro-ui/dist/style/components/button.scss';
-import './index.scss';
+// 导入图标资源
+import icTopLogo from '../../assets/icons/ic_top_logo.svg';
+import icFortuneStarEmpty from '../../assets/icons/ic_fortune_star_empty.svg';
+import icFortuneStarFilled from '../../assets/icons/ic_fortune_star_filled.svg';
+import icFortuneStarHalf from '../../assets/icons/ic_fortune_star_half.svg';
+import imgHomeTarotBanner from '../../assets/icons/img_home_tarot_banner.svg';
+import imgHomeSingerBanner from '../../assets/icons/img_home_singer_banner.svg';
+import imgHomeSecretPixel from '../../assets/icons/img_home_secret_pixel.svg';
+import imgHomeFeatureRider from '../../assets/icons/img_home_feature_rider.svg';
+import imgHomeFeatureDice from '../../assets/icons/img_home_feature_dice.svg';
+import imgHomeFeatureFengshui from '../../assets/icons/img_home_feature_fengshui.svg';
 
 interface IndexState {
-  banners: Array<{
-    id: number;
-    image: string;
-    title: string;
-  }>;
-  quickActions: Array<{
-    image: string;
-    value: string;
-    text: string;
-  }>;
+  userInfo: {
+    name: string;
+    birthDate: string;
+    constellation: string;
+  };
+  todayFortune: {
+    overall: number; // 1-5星
+    love: number;
+    career: number;
+    wealth: number;
+    health: number;
+    percentage: number;
+  };
 }
 
 export default class Index extends Component<PropsWithChildren, IndexState> {
   constructor(props) {
     super(props);
     this.state = {
-      banners: [
-        {
-          id: 1,
-          image: '',
-          title: '探索神秘的占卜世界',
-        },
-        {
-          id: 2,
-          image: '',
-          title: '每日运势为你指引方向',
-        },
-        {
-          id: 3,
-          image: '',
-          title: '专业塔罗师在线服务',
-        },
-      ],
-      quickActions: [
-        {
-          image: '🔮',
-          value: 'tarot',
-          text: '塔罗占卜',
-        },
-        {
-          image: '⭐',
-          value: 'astrology',
-          text: '星盘分析',
-        },
-        {
-          image: '🎯',
-          value: 'fortune',
-          text: '运势预测',
-        },
-        {
-          image: '💝',
-          value: 'love',
-          text: '爱情占卜',
-        },
-      ],
+      userInfo: {
+        name: '白羊座（示例）',
+        birthDate: '2000-04-15',
+        constellation: '白羊座',
+      },
+      todayFortune: {
+        overall: 4,
+        love: 4,
+        career: 4,
+        wealth: 4,
+        health: 4,
+        percentage: 85,
+      },
     };
   }
 
@@ -87,107 +71,166 @@ export default class Index extends Component<PropsWithChildren, IndexState> {
   handleQuickAction = (item, _index) => {
     console.log('快捷操作:', item);
 
-    // 跳转到占卜页面
-    Taro.switchTab({
-      url: '/pages/divination/index',
-    });
+    // 根据不同的快捷操作跳转到对应页面
+    switch (item.value) {
+      case 'tarot':
+        Taro.navigateTo({
+          url: '/pages/tarot/index',
+        });
+        break;
+      case 'fortune':
+        Taro.navigateTo({
+          url: '/pages/fortune/index',
+        });
+        break;
+      case 'astrology':
+        Taro.navigateTo({
+          url: '/pages/ai/index',
+        });
+        break;
+      default:
+        Taro.switchTab({
+          url: '/pages/divination/index',
+        });
+        break;
+    }
   };
 
   handleDailyFortune = () => {
-    Taro.showToast({
-      title: '每日运势功能开发中',
-      icon: 'none',
+    Taro.navigateTo({
+      url: '/pages/fortune/index',
     });
   };
 
   handleShop = () => {
-    Taro.showToast({
-      title: '商城功能开发中',
-      icon: 'none',
+    Taro.switchTab({
+      url: '/pages/shop/index',
     });
   };
 
+  // 渲染星星评级
+  renderStars = (rating: number) => {
+    const stars: JSX.Element[] = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<Image key={i} src={icFortuneStarFilled} className="fortune-star" />);
+      } else if (i - 0.5 <= rating) {
+        stars.push(<Image key={i} src={icFortuneStarHalf} className="fortune-star" />);
+      } else {
+        stars.push(<Image key={i} src={icFortuneStarEmpty} className="fortune-star" />);
+      }
+    }
+    return stars;
+  };
+
   render() {
-    const { banners, quickActions } = this.state;
+    const { userInfo, todayFortune } = this.state;
 
     return (
-      <View className="index-page">
-        {/* 轮播图 */}
-        <View className="banner-section">
-          <Swiper
-            className="banner-swiper"
-            indicatorColor="rgba(255, 255, 255, 0.3)"
-            indicatorActiveColor="#fff"
-            circular
-            indicatorDots
-            autoplay
-            interval={3000}
-            duration={500}
-          >
-            {banners.map(banner => (
-              <SwiperItem key={banner.id} onClick={() => this.handleBannerClick(banner)}>
-                <View className="banner-item">
-                  <Text className="banner-title">{banner.title}</Text>
-                </View>
-              </SwiperItem>
-            ))}
-          </Swiper>
+      <ScrollView className="index-page" scrollY>
+        {/* 顶部Logo */}
+        <View className="header">
+          <Image src={icTopLogo} className="top-logo" />
         </View>
 
-        {/* 快捷操作 */}
-        <View className="quick-actions">
-          <Text className="section-title">快速占卜</Text>
-          <AtGrid
-            data={quickActions}
-            columnNum={4}
-            hasBorder={false}
-            onClick={this.handleQuickAction}
-          />
-        </View>
-
-        {/* 今日运势 */}
-        <View className="daily-section">
-          <AtCard title="今日运势" extra="查看详情" onClick={this.handleDailyFortune}>
-            <View className="daily-content">
-              <Text className="daily-text">
-                今天是充满机遇的一天，保持积极的心态，好运将会降临。
-              </Text>
-              <View className="daily-stats">
-                <View className="stat-item">
-                  <Text className="stat-label">综合运势</Text>
-                  <Text className="stat-value">⭐⭐⭐⭐☆</Text>
-                </View>
-                <View className="stat-item">
-                  <Text className="stat-label">幸运色彩</Text>
-                  <Text className="stat-value">紫色</Text>
-                </View>
-              </View>
+        {/* 用户信息卡片 */}
+        <View className="user-card">
+          <View className="user-info">
+            <View className="user-avatar">
+              <View className="avatar-placeholder"></View>
             </View>
-          </AtCard>
-        </View>
-
-        {/* 推荐服务 */}
-        <View className="services-section">
-          <Text className="section-title">推荐服务</Text>
-          <View className="service-cards">
-            <AtCard className="service-card">
-              <View className="service-content">
-                <Text className="service-icon">🛍️</Text>
-                <Text className="service-title">神秘商城</Text>
-                <Text className="service-desc">精选占卜用品</Text>
-                <AtButton
-                  type="primary"
-                  size="small"
-                  onClick={this.handleShop}
-                  className="service-btn"
-                >
-                  立即查看
-                </AtButton>
-              </View>
-            </AtCard>
+            <View className="user-details">
+              <Text className="user-name">{userInfo.name}</Text>
+              <Text className="user-birth">{userInfo.birthDate}</Text>
+            </View>
+            <View className="user-actions">
+              <Text className="edit-btn">编辑</Text>
+              <Text className="more-btn">...</Text>
+            </View>
           </View>
         </View>
-      </View>
+
+        {/* 今日运势和塔罗占卜 */}
+        <View className="main-content">
+          {/* 今日运势卡片 */}
+          <View className="fortune-card">
+            <Text className="card-title">今日运势</Text>
+            <View className="fortune-stats">
+              <View className="stat-row">
+                <Text className="stat-label">爱情运势</Text>
+                <View className="stat-stars">{this.renderStars(todayFortune.love)}</View>
+                <Text className="stat-percent">{todayFortune.percentage}%</Text>
+              </View>
+              <View className="stat-row">
+                <Text className="stat-label">事业运势</Text>
+                <View className="stat-stars">{this.renderStars(todayFortune.career)}</View>
+                <Text className="stat-percent">{todayFortune.percentage}%</Text>
+              </View>
+              <View className="stat-row">
+                <Text className="stat-label">财富运势</Text>
+                <View className="stat-stars">{this.renderStars(todayFortune.wealth)}</View>
+                <Text className="stat-percent">{todayFortune.percentage}%</Text>
+              </View>
+              <View className="stat-row">
+                <Text className="stat-label">对运运势</Text>
+                <View className="stat-stars">{this.renderStars(todayFortune.overall)}</View>
+                <Text className="stat-percent">{todayFortune.percentage}%</Text>
+              </View>
+              <View className="stat-row">
+                <Text className="stat-label">健康指数</Text>
+                <View className="stat-stars">{this.renderStars(todayFortune.health)}</View>
+                <Text className="stat-percent">{todayFortune.percentage}%</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* 塔罗占卜卡片 */}
+          <View className="tarot-card" onClick={() => this.handleQuickAction({ value: 'tarot' }, 0)}>
+            <Text className="card-title">塔罗占卜</Text>
+            <Text className="card-subtitle">专业解析·AI分析</Text>
+            <Image src={imgHomeTarotBanner} className="tarot-image" />
+          </View>
+        </View>
+
+        {/* 占卜歌者横幅 */}
+        <View className="singer-banner" onClick={() => this.handleQuickAction({ value: 'singer' }, 0)}>
+          <Image src={imgHomeSingerBanner} className="singer-image" />
+          <View className="singer-content">
+            <Text className="singer-title">占卜歌者100%的</Text>
+            <Text className="singer-subtitle">灵魂传递</Text>
+          </View>
+        </View>
+
+        {/* 洞悉命理奥秘 */}
+        <View className="secret-section" onClick={() => this.handleQuickAction({ value: 'secret' }, 0)}>
+          <Image src={imgHomeSecretPixel} className="secret-image" />
+          <View className="secret-content">
+            <Text className="secret-title">洞悉命理奥秘，</Text>
+            <Text className="secret-subtitle">揭开命运密码</Text>
+            <Text className="secret-desc">人生路途充满未知，命运学AI让你看透命运</Text>
+            <Text className="secret-desc">的运转法则，助你把握人生主动权</Text>
+            <Text className="secret-count">♪ 999+</Text>
+          </View>
+        </View>
+
+        {/* 底部功能区 */}
+        <View className="bottom-features">
+          <View className="feature-row">
+            <View className="feature-item" onClick={() => this.handleQuickAction({ value: 'rider' }, 0)}>
+              <Image src={imgHomeFeatureRider} className="feature-icon" />
+              <Text className="feature-text">雷诺曼牌</Text>
+            </View>
+            <View className="feature-item" onClick={() => this.handleQuickAction({ value: 'dice' }, 0)}>
+              <Image src={imgHomeFeatureDice} className="feature-icon" />
+              <Text className="feature-text">星座骰子</Text>
+            </View>
+            <View className="feature-item" onClick={() => this.handleQuickAction({ value: 'fengshui' }, 0)}>
+              <Image src={imgHomeFeatureFengshui} className="feature-icon" />
+              <Text className="feature-text">办公风水</Text>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }

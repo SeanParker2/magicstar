@@ -4,10 +4,10 @@ import { AtForm, AtInput, AtButton } from 'taro-ui';
 import Taro from '@tarojs/taro';
 import { authService } from '../../services/auth';
 
-import 'taro-ui/dist/style/components/form.scss';
-import 'taro-ui/dist/style/components/input.scss';
-import 'taro-ui/dist/style/components/button.scss';
-import './index.scss';
+// import 'taro-ui/dist/style/components/form.css';
+// import 'taro-ui/dist/style/components/input.css';
+// import 'taro-ui/dist/style/components/button.css';
+import './index.css';
 
 interface RegisterState {
   username: string;

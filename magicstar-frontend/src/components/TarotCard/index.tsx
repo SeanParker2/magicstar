@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import { TarotCard as TarotCardType } from '../../services/divination';
-import './index.scss';
+import './index.css';
 
 interface TarotCardProps {
   card: TarotCardType;

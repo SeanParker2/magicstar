@@ -1,0 +1,35 @@
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="mysticalGrad1" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#4a00e0;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8e2de2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </radialGradient>
+    <pattern id="stars1" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#ffd700" opacity="0.8"/>
+      <circle cx="30" cy="25" r="0.5" fill="#ffffff" opacity="0.6"/>
+      <circle cx="45" cy="40" r="0.8" fill="#ffd700" opacity="0.4"/>
+      <circle cx="5" cy="35" r="0.3" fill="#ffffff" opacity="0.7"/>
+    </pattern>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="800" height="400" fill="url(#mysticalGrad1)"/>
+  <rect width="800" height="400" fill="url(#stars1)" opacity="0.6"/>
+  
+  <!-- 神秘图案 -->
+  <circle cx="150" cy="100" r="80" fill="none" stroke="#ffd700" stroke-width="2" opacity="0.3"/>
+  <circle cx="650" cy="300" r="60" fill="none" stroke="#8e2de2" stroke-width="3" opacity="0.4"/>
+  
+  <!-- 水晶球效果 -->
+  <circle cx="200" cy="200" r="40" fill="rgba(255,255,255,0.1)" stroke="#ffd700" stroke-width="1" opacity="0.6"/>
+  <circle cx="200" cy="200" r="30" fill="rgba(255,255,255,0.05)"/>
+  
+  <!-- 塔罗牌轮廓 -->
+  <rect x="600" y="80" width="40" height="60" rx="3" fill="rgba(255,215,0,0.3)" stroke="#ffd700" stroke-width="1"/>
+  <rect x="550" y="120" width="40" height="60" rx="3" fill="rgba(255,215,0,0.2)" stroke="#ffd700" stroke-width="1"/>
+  
+  <!-- 装饰元素 -->
+  <polygon points="400,50 410,70 430,70 416,82 422,102 400,90 378,102 384,82 370,70 390,70" fill="#ffd700" opacity="0.5"/>
+  <polygon points="100,350 110,330 130,330 116,318 122,298 100,310 78,298 84,318 70,330 90,330" fill="#8e2de2" opacity="0.4"/>
+</svg>

@@ -10,7 +10,7 @@ import {
   AtInput,
 } from 'taro-ui';
 import Taro from '@tarojs/taro';
-import './index.scss';
+import './index.css';
 
 interface PaymentMethod {
   id: string;

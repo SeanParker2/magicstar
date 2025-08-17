@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { View, Text } from '@tarojs/components';
 import { AtIcon, AtTag, AtSteps, AtTimeline } from 'taro-ui';
-import './index.scss';
+import './index.css';
 
 // 订单状态类型定义
 type OrderStatusType =

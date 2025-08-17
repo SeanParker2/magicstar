@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { View, Text } from '@tarojs/components';
 import { AtInput, AtButton, AtForm, AtCheckbox, AtMessage } from 'taro-ui';
 import Taro from '@tarojs/taro';
-import './index.scss';
+import './index.css';
 
 export interface LoginFormProps {
   /** 登录模式 */

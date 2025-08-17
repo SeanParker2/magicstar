@@ -3,7 +3,7 @@ import { View, Text, Picker } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { AtCard, AtButton, AtIcon, AtSwitch, AtList, AtListItem, AtDivider } from 'taro-ui';
 import { FortuneService, FortuneReminderSettings, FortuneType } from '../../../services/fortune';
-import './index.scss';
+import './index.css';
 
 // 使用服务层定义的接口
 // type ReminderSettings = FortuneReminderSettings;

@@ -2,7 +2,7 @@ import { View, Text } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
 import { tarotService, TarotSpread } from '../../services/tarot';
-import './index.scss';
+import './index.css';
 
 const TarotIndex = () => {
   const [spreads, setSpreads] = useState<TarotSpread[]>([]);

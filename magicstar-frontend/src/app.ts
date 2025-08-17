@@ -3,7 +3,7 @@ import { PerformanceMonitor } from './utils/performance';
 import { CacheManager } from './utils/cache';
 import { ImageOptimizer } from './utils/imageOptimizer';
 
-import './app.scss';
+import './app.css';
 
 class App extends Component<PropsWithChildren> {
   private performanceMonitor: PerformanceMonitor | null = null;
@@ -88,9 +88,9 @@ class App extends Component<PropsWithChildren> {
 
       // 预加载关键图片
       const criticalImages = [
-        '/assets/images/logo.png',
-        '/assets/images/default-avatar.png',
-        '/assets/images/loading.gif',
+        '/assets/images/logo.svg',
+      '/assets/images/default-avatar.svg',
+      '/assets/images/loading.svg',
       ];
 
       optimizer.addToPreloadQueue(criticalImages);

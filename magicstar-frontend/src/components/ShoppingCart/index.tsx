@@ -12,7 +12,7 @@ import {
 } from 'taro-ui';
 import Taro from '@tarojs/taro';
 import { CartItem } from '../../services/shop';
-import './index.scss';
+import './index.css';
 
 interface ShoppingCartProps {
   visible: boolean;

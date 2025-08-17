@@ -5,12 +5,12 @@ import Taro from '@tarojs/taro';
 import { shopService } from '../../../services/shop';
 import type { Cart, CartItem } from '../../../services/shop';
 
-import 'taro-ui/dist/style/components/button.scss';
-import 'taro-ui/dist/style/components/input-number.scss';
-import 'taro-ui/dist/style/components/checkbox.scss';
-import 'taro-ui/dist/style/components/swipe-action.scss';
-import 'taro-ui/dist/style/components/load-more.scss';
-import './index.scss';
+// import 'taro-ui/dist/style/components/button.css';
+// import 'taro-ui/dist/style/components/input-number.css';
+// import 'taro-ui/dist/style/components/checkbox.css';
+// import 'taro-ui/dist/style/components/swipe-action.css';
+// import 'taro-ui/dist/style/components/load-more.css';
+import './index.css';
 
 interface CartState {
   cart: Cart | null;

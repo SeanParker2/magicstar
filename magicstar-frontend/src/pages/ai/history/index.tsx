@@ -2,7 +2,7 @@ import { View, Text, Button, ScrollView } from '@tarojs/components';
 import { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
 import { aiService, InterpretationResult } from '../../../services/ai';
-import './index.scss';
+import './index.css';
 
 const AiHistory = () => {
   const [interpretations, setInterpretations] = useState<InterpretationResult[]>([]);

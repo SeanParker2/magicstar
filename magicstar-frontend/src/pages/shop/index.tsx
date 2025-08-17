@@ -5,9 +5,9 @@ import Taro from '@tarojs/taro';
 import { shopService } from '../../services/shop';
 import type { Product, ProductCategory } from '../../services/shop';
 
-import 'taro-ui/dist/style/components/grid.scss';
-import 'taro-ui/dist/style/components/search-bar.scss';
-import './index.scss';
+// import 'taro-ui/dist/style/components/grid.css';
+// import 'taro-ui/dist/style/components/search-bar.css';
+import './index.css';
 
 interface ShopState {
   categories: ProductCategory[];

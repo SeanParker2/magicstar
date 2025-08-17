@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import { AtTag, AtProgress, AtIcon } from 'taro-ui';
-import './index.scss';
+import './index.css';
 
 export interface FortuneData {
   /** 运势类型 */

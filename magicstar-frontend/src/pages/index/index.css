@@ -1,0 +1,614 @@
+/* 首页样式 - 按照设计稿重构 */
+.index-page {
+  min-height: 100vh;
+  background-color: #1D1F33;
+  padding: 0;
+  color: #E4DED7;
+}
+
+/* 顶部Logo */
+.header {
+  padding: 20px;
+  text-align: center;
+}
+
+.top-logo {
+  width: 200px;
+  height: 60px;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  margin: 20px 16px;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 222, 215, 0.1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(135deg, #FABD2F 0%, #E4DED7 100%);
+  padding: 3px;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatar-placeholder::before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background: #E4DED7;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+}
+
+.avatar-placeholder::after {
+  content: '';
+  width: 32px;
+  height: 20px;
+  background: #E4DED7;
+  border-radius: 16px 16px 0 0;
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #E4DED7;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.5px;
+}
+
+.user-birth {
+  font-size: 15px;
+  color: #FABD2F;
+  display: block;
+  font-weight: 500;
+}
+
+.user-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.edit-btn {
+  font-size: 14px;
+  color: #1A1D25;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #FABD2F 0%, #E4DED7 100%);
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(250, 189, 47, 0.3);
+  transition: all 0.3s ease;
+}
+
+.edit-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(250, 189, 47, 0.4);
+}
+
+.more-btn {
+  font-size: 20px;
+  color: #E4DED7;
+  padding: 8px 12px;
+  background: rgba(228, 222, 215, 0.1);
+  border-radius: 50%;
+  border: 1px solid rgba(228, 222, 215, 0.2);
+  transition: all 0.3s ease;
+}
+
+.more-btn:active {
+  background: rgba(228, 222, 215, 0.2);
+}
+
+/* 主要内容区域 */
+.main-content {
+  margin: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+/* 运势卡片 */
+.fortune-card {
+  flex: 1;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 222, 215, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.fortune-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FABD2F 0%, #E4DED7 50%, #FABD2F 100%);
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #E4DED7;
+  margin-bottom: 20px;
+  display: block;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.card-title::after {
+  content: '全部';
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #FABD2F;
+  background: rgba(250, 189, 47, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(250, 189, 47, 0.2);
+}
+
+.fortune-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(228, 222, 215, 0.1);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 15px;
+  color: #E4DED7;
+  flex: 1;
+  font-weight: 500;
+}
+
+.stat-stars {
+  display: flex;
+  gap: 6px;
+  margin: 0 16px;
+  align-items: center;
+}
+
+.fortune-star {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.stat-percent {
+  font-size: 16px;
+  color: #FABD2F;
+  font-weight: 700;
+  min-width: 45px;
+  text-align: right;
+  letter-spacing: 0.5px;
+}
+
+/* 塔罗占卜卡片 */
+.tarot-card {
+  flex: 1;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 20px;
+  padding: 24px;
+  margin-left: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 222, 215, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.tarot-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FABD2F 0%, #E4DED7 50%, #FABD2F 100%);
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: #FABD2F;
+  margin-bottom: 16px;
+  display: block;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.tarot-image {
+  width: 70px;
+  height: 80px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+}
+
+.tarot-card:active .tarot-image {
+  transform: scale(1.05);
+}
+
+/* 占卜歌者横幅 */
+.singer-banner {
+  margin: 20px 16px;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 222, 215, 0.1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.singer-banner:active {
+  transform: translateY(1px);
+}
+
+.singer-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FABD2F 0%, #E4DED7 50%, #FABD2F 100%);
+}
+
+.singer-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.singer-content {
+  flex: 1;
+}
+
+.singer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #E4DED7;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.5px;
+}
+
+.singer-subtitle {
+  font-size: 16px;
+  color: #FABD2F;
+  display: block;
+  font-weight: 600;
+}
+
+/* 洞悉命理奥秘 */
+.secret-section {
+  margin: 20px 16px;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 222, 215, 0.1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.secret-section:active {
+  transform: translateY(1px);
+}
+
+.secret-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FABD2F 0%, #E4DED7 50%, #FABD2F 100%);
+}
+
+.secret-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.secret-content {
+  flex: 1;
+}
+
+.secret-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #E4DED7;
+  margin-bottom: 4px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+.secret-subtitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #E4DED7;
+  margin-bottom: 12px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+.secret-desc {
+  font-size: 13px;
+  color: #B0B0B0;
+  line-height: 1.5;
+  margin-bottom: 3px;
+  display: block;
+  font-weight: 400;
+}
+
+.secret-count {
+  font-size: 14px;
+  color: #FABD2F;
+  font-weight: 700;
+  margin-top: 12px;
+  display: block;
+  letter-spacing: 0.5px;
+}
+
+/* 底部功能区 */
+.bottom-features {
+  margin: 20px 16px;
+  padding-bottom: 100px; /* 为底部导航栏留出空间 */
+}
+
+.feature-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.feature-item {
+  flex: 1;
+  background: linear-gradient(135deg, #2A2D3A 0%, #1E2029 100%);
+  border-radius: 20px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(228, 222, 215, 0.1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  min-height: 100px;
+  justify-content: center;
+}
+
+.feature-item:active {
+  transform: translateY(1px);
+}
+
+.feature-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #FABD2F 0%, #E4DED7 50%, #FABD2F 100%);
+}
+
+.feature-icon {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.feature-item:active .feature-icon {
+  transform: scale(1.1);
+}
+
+.feature-text {
+  color: #E4DED7;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.3px;
+  display: block;
+}
+
+/* 响应式设计 */
+/* 桌面端优化 */
+@media (min-width: 1200px) {
+  .index-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  
+  .main-content {
+    gap: 40px;
+  }
+  
+  .today-fortune,
+  .tarot-card {
+    padding: 30px;
+  }
+  
+  .singer-banner,
+  .secret-section {
+    padding: 30px;
+    margin: 30px;
+  }
+  
+  .bottom-features {
+    margin: 30px;
+  }
+  
+  .feature-row {
+    gap: 30px;
+  }
+}
+
+/* 平板端适配 */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .index-container {
+    padding: 0 30px;
+  }
+  
+  .main-content {
+    gap: 25px;
+  }
+  
+  .singer-banner,
+  .secret-section {
+    margin: 25px;
+  }
+  
+  .feature-row {
+    gap: 25px;
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 767px) {
+  .main-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .tarot-card {
+    width: 100%;
+  }
+  
+  .feature-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .singer-banner,
+  .secret-section {
+    flex-direction: column;
+    text-align: center;
+    margin: 20px 15px;
+  }
+  
+  .singer-image,
+  .secret-image {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .bottom-features {
+    margin: 20px 15px;
+    padding-bottom: 120px; /* 移动端底部导航栏更高 */
+  }
+}
+
+/* 小屏手机适配 */
+@media (max-width: 480px) {
+  .index-container {
+    padding: 0 10px;
+  }
+  
+  .user-card,
+  .today-fortune,
+  .tarot-card {
+    margin: 15px 10px;
+    padding: 15px;
+  }
+  
+  .singer-banner,
+  .secret-section {
+    margin: 15px 10px;
+    padding: 15px;
+  }
+  
+  .bottom-features {
+    margin: 15px 10px;
+  }
+  
+  .feature-item {
+    padding: 15px;
+  }
+  
+  .feature-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .feature-text {
+    font-size: 20px;
+  }
+}

@@ -3,7 +3,7 @@ import { View, Text, Canvas } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { AtCard, AtButton, AtIcon, AtSegmentedControl, AtCalendar } from 'taro-ui';
 import { FortuneService, FortuneTrendData, FortuneTrendStats } from '../../../services/fortune';
-import './index.scss';
+import './index.css';
 
 // 使用服务层定义的接口
 // type TrendData = FortuneTrendData;

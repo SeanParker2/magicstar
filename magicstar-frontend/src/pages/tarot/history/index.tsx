@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { AtButton, AtCard, AtTag, AtLoadMore } from 'taro-ui';
 import { tarotService, HistoryRecord } from '../../../services/tarot';
-import './index.scss';
+import './index.css';
 
 const TarotHistory: React.FC = () => {
   const [records, setRecords] = useState<HistoryRecord[]>([]);

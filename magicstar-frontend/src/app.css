@@ -1,0 +1,11 @@
+/* Magic Star 全局样式 */
+@import './styles/global.css';
+
+/* Taro UI 主题定制 - 暂时注释以避免@charset问题 */
+/* @import '~taro-ui/dist/style/index.css'; */
+
+/* 应用根容器 */
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 100%);
+}
